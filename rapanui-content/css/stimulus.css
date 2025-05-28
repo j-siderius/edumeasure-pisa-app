@@ -1,0 +1,202 @@
+body {
+    font-family: Arial;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+b { font-weight:bold; }
+i { font-style: italic; }
+p { margin-bottom: 16px; }
+sub {
+    position: relative;
+    bottom: -0.5em;
+    font-size: 0.83em;
+}
+u {text-decoration: underline;}
+sup {
+    position: relative;
+    top: -0.5em;
+    font-size: 0.83em;
+}
+
+#opticianStimulus {
+    font-family: arial;
+    font-size: 14px;
+    line-height: 1.2;
+    height:686px;
+    position:relative;
+    padding:10px 20px 0;
+}
+
+#title {
+    text-align:center;
+    margin-bottom:20px;
+    padding:5px;
+    background-color:#777777;
+    color:#ffffff;
+}
+
+#subtitle {
+    font-size: 16px;
+    font-weight:bold;
+    margin-bottom:16px;
+}
+
+#stim2title {
+    margin-top:16px;
+    font-size: 16px;
+    font-weight:bold;
+    text-align:center;
+}
+
+#img1 {
+    display:block;
+    float:right;
+    margin-bottom:5px;
+}
+
+#img2 {
+    display:block;
+    float:left;
+}
+
+#img3 {
+    display: block;
+    margin: 16px auto;
+    height: 280px;
+}
+
+/* tabs */
+.tabFrame {
+    width: 100%;
+    height: 665px;
+}
+
+/* Page 1 */
+#browserHeader{
+    background-image: url(../images/WebPageHeader.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 23px;
+}
+#urlTxt {
+    display: inline-block;
+    margin-left: 80px;
+    margin-top: 3px;
+    font-size: 0.9em;
+}
+#pg1Content {
+    height: 100%;
+    overflow: auto;
+}
+#Page1_stimulus {
+    background-color: #EEECE1;
+}
+#pg1Body {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+#pg1Title {
+    background-image: url('../images/Pg1Header.png');
+    background-size: 100% 100%;
+    padding-left: 20px;
+    font-size: 20px;
+    color: white;
+    vertical-align: middle;
+    height: 70px;
+    position: static;
+}
+#pg1Logo {
+    margin-right: 20px;
+}
+#pg1TitleText {
+    display: inline-block;
+    position: relative;
+    top: -20px;
+}
+#subtitle {
+    color: #9B561D;
+}
+
+/* Page 2  */
+#Page2_stimulus {
+    background-color: #9BB7D9;
+}
+#pg2Body {
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border: solid black 1px;
+    border-radius: 15px;
+}
+
+#pg2Title {
+    padding-left: 20px;
+    font-size: 20px;
+    color: white;
+    vertical-align: middle;
+    height: 85px;
+    position: relative;
+    text-align: center;
+}
+#pg2Logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#pg2TitleText {
+    display: inline-block;
+    margin-top: 30px;
+}
+
+/* Page 3 */
+#Page3_stimulus {
+ }
+#pg3Header {
+    font-weight: bold;
+    font-size: 21px;
+    margin-bottom: 6px;
+}
+#pg3Subheader {
+    font-style: italic;
+    margin-bottom: 20px;
+}
+#pg3Body {
+    margin: 20px 40px;
+    padding: 0px;
+    background-color: #FFF;
+}
+
+#pg3Title {
+    background-color: #7F7F7F;
+    font-size: 28px;
+    padding-top: 5px;
+    color: #FFF;
+    vertical-align: middle;
+    height: 37px;
+    position: static;
+    text-align: center;
+    font-family: "Times New Roman";
+    font-weight: bold;
+}
+#pg3Columns {
+    margin-top: 10px;
+    -webkit-columns: 300px 2;
+    -moz-columns: 300px 2;
+}
+#pg3Columns p {
+    margin-bottom: 18px;
+    line-height: 1.4;
+}
+
+.commentHdr {
+    font-style: italic;
+    background-color: rgb(217, 229, 193);
+    margin-top: 8px;
+}
+.commentDate {
+    float: right;
+}
