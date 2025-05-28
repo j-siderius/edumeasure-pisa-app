@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Professor's blog",
+        "content": "rapanui-content/prof_blog.html"
+    },
+    {
+        "name": "Book review",
+        "content": "rapanui-content/book_review.html"
+    },
+    {
+        "name": "Science News",
+        "content": "rapanui-content/science_news.html"
+    }
+]

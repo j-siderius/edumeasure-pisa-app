@@ -16,8 +16,44 @@ fetch('data.json')
     })
     .catch(error => console.error("Error loading data.json: ", error));
 
-var input = document.getElementById("chat-input");
-input.addEventListener("keypress", function (event) {
+let informationData = null;
+
+fetch('information.json')
+    .then(response => response.json())
+    .then(data => {
+
+        informationData = data;
+        // Create tab links and content divs
+        var tabsContainer = document.getElementById('tabs');
+        var contentContainer = document.getElementById('content');
+
+        data.forEach(function (item, index) {
+            // Create tab link
+            var tabLink = document.createElement('a');
+            tabLink.textContent = item.name;
+            tabLink.classList.add("tab-link");
+            tabLink.onclick = function () { selectTab(index); };
+
+            tabsContainer.appendChild(tabLink);
+
+            // Create iframe for content
+            var iframe = document.createElement('iframe');
+            iframe.src = item.content;
+            iframe.width = '90%';
+            iframe.height = '100%';
+
+            if (index === 0) {
+                iframe.style.display = 'block';
+            } else {
+                iframe.style.display = 'none';
+            }
+
+            contentContainer.appendChild(iframe);
+        });
+    })
+    .catch(error => console.error("Error loading information.json: ", error));
+
+document.getElementById("chat-input").addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
         event.preventDefault();
         sendButton();
@@ -76,4 +112,15 @@ function sendButton() {
         // Enable the input again
         document.getElementById('chat-input').disabled = false;
     }
+}
+
+function selectTab(index) {
+    informationData.forEach(function (item, i) {
+        var iframe = document.getElementById('content').children[i];
+        if (i === index) {
+            iframe.style.display = 'block';
+        } else {
+            iframe.style.display = 'none';
+        }
+    });
 }
