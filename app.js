@@ -60,14 +60,25 @@ document.getElementById("chat-input").addEventListener("keypress", function (eve
     }
 });
 
-function displayChatMessage(text, cssClass) {
+function displayChatMessage(text, cssClass, delay = 0) {
     // Create and grab the chat objects
     const chatMessage = document.createElement('div');
     const chatMessages = document.querySelector('.chat-messages');
-    // Add the input to the chat
-    chatMessage.textContent = text;
-    chatMessage.classList.add('chat-message', cssClass);
-    chatMessages.appendChild(chatMessage);
+
+    // Add the input to the chat, iterating over it if there is an array
+    if (Array.isArray(text)) {
+        text.forEach((item) => {
+            displayChatMessage(item.content, cssClass, item.delay);
+        });
+    } else {
+        chatMessage.textContent = text;
+        chatMessage.classList.add('chat-message', cssClass);
+
+        // delay the message display by the delay timer
+        setTimeout(() => {
+            chatMessages.appendChild(chatMessage);
+        }, delay);
+    }
 }
 
 function sendButton() {
