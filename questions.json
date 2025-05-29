@@ -1,0 +1,116 @@
+[
+    {
+        "_comment": "node 0",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Hello there!",
+                "delay": 0
+            },
+            {
+                "type": "received",
+                "content": "It is nice chatting to you.",
+                "delay": 0
+            },
+            {
+                "type": "received",
+                "content": "I have read about this strange island: what can you tell me about Rapa Nui?",
+                "delay": 0
+            },
+            {
+                "type": "prompt",
+                "content": "Use the Professor's blog to find information about Rapa Nui. Answer in the chat box below.",
+                "delay": 0
+            }
+        ],
+        "question": "open",
+        "routes": [
+            {
+                "_comment": "correct answer",
+                "keywords": [ "island", "maoi statues" ],
+                "gotoNode": 2
+            },
+            {
+                "_comment": "incorrect / default answer",
+                "gotoNode": 1
+            }
+        ]
+    },
+    {
+        "_comment": "node 1",
+        "messages": [
+            {
+                "type": "received",
+                "content": "That does not seem right... Let's talk about something else.",
+                "delay": 1000
+            }
+        ],
+        "routes": [
+            {
+                "_comment": "only route to continue",
+                "gotoNode": 2
+            }
+        ]
+    },
+    {
+        "_comment": "node 2",
+        "messages": [
+            {
+                "type": "received",
+                "content": "I also saw that there are Maoi statues. How were the Maoi statues transported over the island?"
+            },
+            {
+                "type": "prompt",
+                "content": "Use the Professor's blog to find how the maoi statues were transported. Select the correct option.",
+                "delay": 1000
+            }
+        ],
+        "question": "multipleChoice",
+        "options": [ "The statues were rolled using ropes and rollers.", "The statues were transported using cranes and machinery.", "The statues magically appeared on the island." ],
+        "routes": [
+            {
+                "_comment": "option 1 (correct)",
+                "gotoNode": 4
+            },
+            {
+                "_comment": "option 2 (incorrect)",
+                "gotoNode": 3
+            },
+            {
+                "_comment": "option 3 (incorrect)",
+                "gotoNode": 3
+            }
+        ]
+    },
+    {
+        "_comment": "node 3",
+        "messages": [
+            {
+                "type": "received",
+                "content": "That does not seem right...",
+                "delay": 1000
+            }
+        ],
+        "routes": [
+            {
+                "_comment": "only route to continue",
+                "gotoNode": 4
+            }
+        ]
+    },
+    {
+        "_comment": "node 4",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Thank you for chatting to me!"
+            },
+            {
+                "type": "prompt",
+                "content": "You have completed the test.",
+                "delay": 1000
+            }
+        ],
+        "_comment2": "no routes, end of test"
+    }
+]

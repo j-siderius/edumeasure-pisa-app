@@ -38,6 +38,12 @@ body {
     background-color: #e6f2ff;
 }
 
+.chat-message.prompt {
+    align-self: flex-start;
+    font-style: italic;
+    background-color: #f0fff0;
+}
+
 .chat-message.hidden {
     display: none;
 }
@@ -112,4 +118,15 @@ body {
 .content {
     height: 100vh;
     padding: 10px 0;
+}
+
+.option-btn {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #ccc;
+}
+
+.option-btn:hover {
+  background-color: #aaa;
 }
