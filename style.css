@@ -44,7 +44,21 @@ body {
     background-color: #f0fff0;
 }
 
+.chat-message.multipleChoiceOption {
+    align-self: flex-start;
+    background-color: #fdffd8;
+    cursor: pointer;
+}
+
 .chat-message.hidden {
+    display: none;
+}
+
+.chat-options {
+    padding-left: 20px;
+}
+
+.chat-options.hidden {
     display: none;
 }
 

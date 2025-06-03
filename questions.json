@@ -61,12 +61,12 @@
             },
             {
                 "type": "prompt",
-                "content": "Use the Professor's blog to find how the maoi statues were transported. Select the correct option.",
+                "content": "Use the Professor's blog to find how the maoi statues were transported. Select the correct option below:",
                 "delay": 1000
             }
         ],
         "question": "multipleChoice",
-        "options": [ "The statues were rolled using ropes and rollers.", "The statues were transported using cranes and machinery.", "The statues magically appeared on the island." ],
+        "options": [ "The statues were rolled using ropes and rollers.", "The statues were transported using cranes and machinery.", "The statues magically appeared on the island.", "The statues were carried to Rapa Nui by giants." ],
         "routes": [
             {
                 "_comment": "option 1 (correct)",
@@ -78,6 +78,10 @@
             },
             {
                 "_comment": "option 3 (incorrect)",
+                "gotoNode": 3
+            },
+            {
+                "_comment": "option 4 (incorrect)",
                 "gotoNode": 3
             }
         ]
@@ -111,6 +115,7 @@
                 "delay": 1000
             }
         ],
+        "endTest": true,
         "_comment2": "no routes, end of test"
     }
 ]

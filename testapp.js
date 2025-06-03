@@ -90,23 +90,68 @@ function nodeHandler(nodeIndex) {
     // Wait until all messages have been sent to continue
     setTimeout(() => {
         if (item.question) {
-            // Item is a question, enable the answer field after all messages have been sent
-            document.getElementById('chat-input').disabled = false;
+
+            if (item.question == "multipleChoice") {
+                addMultipleChoiceMessages(item.options);
+                // item.options.forEach(option => {
+                //     addChatMessage(option, 'multipleChoiceOption');
+                // });
+            } else {
+
+                // Item is an open question, enable the answer field after all messages have been sent
+                document.getElementById('chat-input').disabled = false;
+            }
         } else {
-            // Item is not a question, move to next node
-            nodeHandler(item.routes[0].gotoNode);
+            if (item.endTest) {
+                // Last node in the test
+                console.log("End of test is reached.");
+            } else {
+                // Item is not a question, move to next node
+                nodeHandler(item.routes[0].gotoNode);
+            }
         }
     }, delayCounter);
 
+    currentNode = nodeIndex;
+}
+
+let multipleChoiceCounter = 0;
+
+function addMultipleChoiceMessages(options) {
+    let optionsMessage = document.createElement('div');
+    optionsMessage.classList.add('chat-options');
+    optionsMessage.id = multipleChoiceCounter;
+    let chatMessagesContainer = document.querySelector('.chat-messages');
+
+    options.forEach((option, index) => {
+        let optionMessage = document.createElement('div');
+        optionMessage.classList.add('chat-message', 'multipleChoiceOption');
+        let optionLink = document.createElement('a');
+        optionLink.textContent = option;
+        optionLink.onclick = function () {
+            checkAnswer(index);
+        };
+        optionMessage.appendChild(optionLink);
+        optionsMessage.appendChild(optionMessage);
+    });
+
+    chatMessagesContainer.appendChild(optionsMessage);
 }
 
 // Add a chat message to the chat, taking into account it's type
 function addChatMessage(message, type) {
+
+    if (!message || !type) {
+        console.error("No message or message type was was specified!", message, type);
+        return;
+    }
+
     let chatMessage = document.createElement('div');
     let chatMessagesContainer = document.querySelector('.chat-messages');
 
     chatMessage.textContent = message;
-    if (type == "received" || type == "sent" || type == "prompt") chatMessage.classList.add('chat-message', type);
+    // if (type == "received" || type == "sent" || type == "prompt") 
+    chatMessage.classList.add('chat-message', type);
     chatMessagesContainer.appendChild(chatMessage);
 }
 
@@ -151,6 +196,24 @@ function checkAnswer(answer) {
             break;
         case "multipleChoice":
             console.log("Option number:", answer);
+            let answered = false;
+
+            // Check all routes
+            for (let index = 0; index < item.routes.length; index++) {
+                if (index == String(answer)) {
+                    // Add the given answer to the chat and delete the options
+                    addChatMessage(item.options[index], 'sent');
+                    document.getElementsByClassName('chat-options')[multipleChoiceCounter].classList.add('hidden');
+                    multipleChoiceCounter++;
+
+                    // Given answer occurs in the routes, follow the route
+                    nodeHandler(item.routes[index].gotoNode);
+                    answered = true;
+                    break;
+                }
+            }
+
+            if (!answered) console.error("The given answer is not a valid option.", answer);
             break;
         default:
             console.error("It seems like this question type is not supported: ", item.question);
