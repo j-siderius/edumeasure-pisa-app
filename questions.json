@@ -27,7 +27,11 @@
         "routes": [
             {
                 "_comment": "correct answer",
-                "keywords": [ "island", "maoi statues" ],
+                "keywords": [
+                    "island",
+                    "maoi statues",
+                    "no trees"
+                ],
                 "gotoNode": 2
             },
             {
@@ -67,7 +71,12 @@
             }
         ],
         "question": "multipleChoice",
-        "options": [ "The statues were rolled using ropes and rollers.", "The statues were transported using cranes and machinery.", "The statues magically appeared on the island.", "The statues were carried to Rapa Nui by giants." ],
+        "options": [
+            "The statues were rolled using ropes and rollers.",
+            "The statues were transported using cranes and machinery.",
+            "The statues magically appeared on the island.",
+            "The statues were carried to Rapa Nui by giants."
+        ],
         "routes": [
             {
                 "_comment": "option 1 (correct)",
@@ -108,15 +117,83 @@
         "messages": [
             {
                 "type": "received",
+                "content": "I've read so many interesting facts, but I don't understand why there are no trees on the island.",
+                "delay": 1500
+            },
+            {
+                "type": "received",
+                "content": "Do you know what caused the trees on Rapa Nui to dissapear?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Use the Science News article to answer this question. Select the correct option:",
+                "delay": 1000
+            }
+        ],
+        "question": "multipleChoiceImage",
+        "options": [
+            "assets/images/rat.png",
+            "assets/images/bananas.png",
+            "assets/images/cuttingtrees.png",
+            "assets/images/forestfire.png"
+        ],
+        "routes": [
+            {
+                "_comment": "option 1 (correct)",
+                "gotoNode": 9
+            },
+            {
+                "_comment": "option 2 (incorrect)",
+                "gotoNode": 8
+            },
+            {
+                "_comment": "option 3 (incorrect)",
+                "gotoNode": 8
+            },
+            {
+                "_comment": "option 4 (incorrect)",
+                "gotoNode": 8
+            }
+        ]
+    },
+    {
+        "_comment": "node 5"
+    },
+    {
+        "_comment": "node 6"
+    },
+    {
+        "_comment": "node 7"
+    },
+    {
+        "_comment": "node 8",
+        "messages": [
+            {
+                "type": "received",
+                "content": "That does not seem right...",
+                "delay": 1000
+            }
+        ],
+        "routes": [
+            {
+                "_comment": "only route to continue",
+                "gotoNode": 9
+            }
+        ]
+    },
+    {
+        "_comment": "node 9",
+        "messages": [
+            {
+                "type": "received",
                 "content": "Thank you for chatting to me!"
             },
             {
                 "type": "prompt",
-                "content": "You have completed the test.",
-                "delay": 1000
+                "content": "You have completed the test."
             }
         ],
-        "endTest": true,
-        "_comment2": "no routes, end of test"
+        "endTest": true
     }
 ]
