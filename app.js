@@ -1,28 +1,22 @@
+// Fetch all questions and save them into a variable for later access
+// Define node tracker variable
 let itemData = null;
-let currentNodeNr = null;
+let currentNode = null;
 
-// Load the data from the JSON file
-fetch('data.json')
+fetch("questions.json")
     .then(response => response.json())
     .then(data => {
-        // Assign data to global object
         itemData = data;
-
-        // Show the first message
-        displayChatMessage(itemData[0].text, 'received');
-        currentNodeNr = 0;
-        // Enable the input
-        document.getElementById('chat-input').disabled = false;
+        currentNode = 0;
+        nodeHandler(currentNode);
     })
-    .catch(error => console.error("Error loading data.json: ", error));
+    .catch(error => console.error("Error loading questions.json: ", error));
 
-let informationData = null;
-
+// Fetch all information sources and add them as tabs
 fetch('information.json')
     .then(response => response.json())
     .then(data => {
 
-        informationData = data;
         // Create tab links and content divs
         var tabsContainer = document.getElementById('tabs');
         var contentContainer = document.getElementById('content');
@@ -42,96 +36,263 @@ fetch('information.json')
             iframe.width = '90%';
             iframe.height = '100%';
 
+            // Show the first information tab by default
             if (index === 0) {
                 iframe.style.display = 'block';
             } else {
                 iframe.style.display = 'none';
             }
 
+            window.addEventListener('message', function (event) {
+                // Goto selected tab using the passed through target index of the tab
+                let targetTab = event.data.target;
+                switch (targetTab) {
+                    case 'book_review':
+                        selectTab(1);  // TODO: figure out how to remove hardcode
+                        break;
+                    case 'science_news':
+                        selectTab(2);  // TODO: figure out how to remove hardcode
+                        break;
+                    default:
+                        console.error("Specified target is not a tab.:", targetTab);
+                        break;
+                }
+            });
+
             contentContainer.appendChild(iframe);
         });
     })
     .catch(error => console.error("Error loading information.json: ", error));
 
+// Setup Enter as submit button and disable input
+// TODO: do we want Enter to submit > possibly more accidental submits
 document.getElementById("chat-input").addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
         event.preventDefault();
         sendButton();
     }
 });
+document.getElementById('chat-input').disabled = true;
 
-function displayChatMessage(text, cssClass, delay = 0) {
-    // Create and grab the chat objects
-    const chatMessage = document.createElement('div');
-    const chatMessages = document.querySelector('.chat-messages');
-
-    // Add the input to the chat, iterating over it if there is an array
-    if (Array.isArray(text)) {
-        text.forEach((item) => {
-            displayChatMessage(item.content, cssClass, item.delay);
-        });
-    } else {
-        chatMessage.textContent = text;
-        chatMessage.classList.add('chat-message', cssClass);
-
-        // delay the message display by the delay timer
-        setTimeout(() => {
-            chatMessages.appendChild(chatMessage);
-        }, delay);
-    }
-}
-
-function sendButton() {
-    // Get the user input and clear input field
-    const userInput = document.getElementById('chat-input').value.trim();
-    document.getElementById('chat-input').value = '';
-    if (userInput) {  // If there is input
-        // Disable the input
-        document.getElementById('chat-input').disabled = true;
-        // Display the user message
-        displayChatMessage(userInput, 'sent');
-
-        // Get all keyword route options for the current node
-        const currentRoutes = itemData[currentNodeNr].routes;
-        routeLoop:  // make label to break out of nested loop
-        for (route in currentRoutes) {
-            // Get keywords and targetnode for route
-            const routeKeywords = currentRoutes[route].keywords;
-            const routeTargetNode = currentRoutes[route].route;
-
-            // If the route has keywords (not last node)
-            if (routeKeywords) {
-                for (k in routeKeywords) {
-                    // Get all possible keywords from the node
-                    const keyword = routeKeywords[k];
-                    // Check if a keyword is in the user input
-                    if (userInput.toLowerCase().includes(keyword.toLowerCase())) {
-                        // Update the node and add the response with new question to the chat
-                        currentNodeNr = routeTargetNode;
-                        displayChatMessage(itemData[currentNodeNr].text, 'received')
-                        break routeLoop;
-                    }
-                }
-            } else {  // The last option routes to next node
-                // Update the node and add the response with new question to the chat
-                currentNodeNr = routeTargetNode;
-                displayChatMessage(itemData[currentNodeNr].text, 'received')
-                break routeLoop;
-            }
-        }
-
-        // Enable the input again
-        document.getElementById('chat-input').disabled = false;
-    }
-}
-
+// Open the selected tab by hiding all other tabs
 function selectTab(index) {
-    informationData.forEach(function (item, i) {
+    var iframes = document.getElementById('content').children;
+    for (var i = 0; i < iframes.length; i++) {
         var iframe = document.getElementById('content').children[i];
         if (i === index) {
             iframe.style.display = 'block';
         } else {
             iframe.style.display = 'none';
         }
+    }
+}
+
+// Move to the selected node, displaying the relevant messages
+function nodeHandler(nodeIndex) {
+    console.log("Going to node " + nodeIndex);
+
+    let item = itemData[nodeIndex];
+    let delayCounter = 0;
+
+    item.messages.forEach(message => {
+        if (message.delay) delayCounter += message.delay;
+
+        setTimeout(() => {
+            addChatMessage(message.content, message.type)
+        }, delayCounter);
+
     });
+
+    // Wait until all messages have been sent to continue
+    setTimeout(() => {
+        if (item.question) {
+
+            if (item.question == "multipleChoice") {
+                addMultipleChoiceMessages(item.options);
+            } else if (item.question == "multipleChoiceImage") {
+                addMultipleChoiceImages(item.options);
+            } else {
+                // Item is an open question, enable the answer field after all messages have been sent
+                document.getElementById('chat-input').disabled = false;
+            }
+        } else {
+            if (item.endTest) {
+                // Last node in the test
+                console.log("End of test is reached.");
+            } else {
+                // Item is not a question, move to next node
+                nodeHandler(item.routes[0].gotoNode);
+            }
+        }
+    }, delayCounter);
+
+    currentNode = nodeIndex;
+}
+
+let multipleChoiceCounter = 0;
+
+function addMultipleChoiceMessages(options) {
+
+    // Create a container for the multiple choice options
+    let optionsMessage = document.createElement('div');
+    optionsMessage.classList.add('chat-options');
+    optionsMessage.id = multipleChoiceCounter;
+
+    // Add the new options to the chat messages container
+    let chatMessagesContainer = document.querySelector('.chat-messages');
+
+    // Create and add each option link
+    options.forEach((option, index) => {
+        let optionMessage = document.createElement('div');
+        optionMessage.classList.add('chat-message', 'multipleChoiceOption');
+
+        // Add an event listener to the option message
+        let optionLink = document.createElement('a');
+        optionLink.textContent = option;
+        optionLink.onclick = function () {
+            checkAnswer(index);  // Pass the selected index to the answer checker
+        };
+
+        // Append link to option message
+        optionMessage.appendChild(optionLink);
+        optionsMessage.appendChild(optionMessage);
+    });
+
+    chatMessagesContainer.appendChild(optionsMessage);
+}
+
+let multipleChoiceImageCounter = 0;
+
+function addMultipleChoiceImages(options) {
+    let optionsMessage = document.createElement('div');
+    optionsMessage.classList.add('chat-images');
+    optionsMessage.id = multipleChoiceImageCounter;
+
+    // Add the new options to the chat messages container
+    let chatMessagesContainer = document.querySelector('.chat-messages');
+
+    options.forEach((option, index) => {
+        let optionMessage = document.createElement('div');
+        optionMessage.classList.add('chat-message', 'multipleChoiceImage');
+
+        let optionImage = document.createElement('img');
+        optionImage.src = option;
+        optionImage.onclick = function () {
+            checkAnswer(index);  // Pass the selected index to the answer checker
+        };
+
+        optionMessage.appendChild(optionImage);
+        optionsMessage.appendChild(optionMessage);
+    });
+
+    chatMessagesContainer.appendChild(optionsMessage);
+}
+
+// Add a chat message to the chat, taking into account it's type
+function addChatMessage(message, type) {
+
+    if (!message || !type) {
+        console.error("No message or message type was was specified!", message, type);
+        return;
+    }
+
+    let chatMessage = document.createElement('div');
+    let chatMessagesContainer = document.querySelector('.chat-messages');
+
+    if (type == 'sentImage') {
+        let sentImage = document.createElement('img');
+        sentImage.src = message;
+        chatMessage.appendChild(sentImage);
+    } else {
+        chatMessage.textContent = message;
+    }
+    chatMessage.classList.add('chat-message', type);
+    chatMessagesContainer.appendChild(chatMessage);
+}
+
+function sendButton() {
+    // Get the user input and clear input field
+    let userInput = document.getElementById('chat-input').value;
+    const cleanedInput = document.getElementById('chat-input').value.trim().toLowerCase();
+    document.getElementById('chat-input').value = '';
+    if (cleanedInput) {  // If there is input
+        // Disable the input
+        document.getElementById('chat-input').disabled = true;
+        // Display the user message
+        addChatMessage(userInput, "sent");
+
+        checkAnswer(cleanedInput);
+    }
+}
+
+function checkAnswer(answer) {
+    let item = itemData[currentNode];
+
+    switch (item.question) {
+        case "open":
+            // Check all routes
+            routeLoopBreakpoint:  // making a label to break out of the nested for-loop
+            for (let route of item.routes) {
+                // If the route has keywords (is a correct answer), check against answer
+                if (route.keywords) {
+                    for (let keyword of route.keywords) {
+                        if (answer.includes(keyword.trim().toLowerCase())) {
+                            // If the given answer includes some keywords, move to the given node
+                            nodeHandler(route.gotoNode);
+                            break routeLoopBreakpoint;
+                        }
+                    }
+                } else {
+                    // Route has no keywords, aka last route, move to the given node
+                    nodeHandler(route.gotoNode);
+                    break routeLoopBreakpoint;
+                }
+            }
+            break;
+        case "multipleChoice":
+            console.log("Option number:", answer);
+            let answered = false;
+
+            // Check all routes
+            for (let index = 0; index < item.routes.length; index++) {
+                if (index == String(answer)) {
+                    // Add the given answer to the chat and delete the options
+                    addChatMessage(item.options[index], 'sent');
+                    document.getElementsByClassName('chat-options')[multipleChoiceCounter].classList.add('hidden');
+                    multipleChoiceCounter++;
+
+                    // Given answer occurs in the routes, follow the route
+                    nodeHandler(item.routes[index].gotoNode);
+                    answered = true;
+                    break;
+                }
+            }
+
+            if (!answered) console.error("The given answer is not a valid option.", answer);
+            break;
+        case "multipleChoiceImage":
+            console.log("Image option:", answer);
+            let answeredImage = false;
+
+            // Check all routes
+            for (let index = 0; index < item.routes.length; index++) {
+                if (index == String(answer)) {
+                    // Add the given answer to the chat and delete the options
+                    addChatMessage(item.options[index], 'sentImage');
+                    document.getElementsByClassName('chat-images')[multipleChoiceImageCounter].classList.add('hidden');
+                    multipleChoiceCounter++;
+
+                    // Given answer occurs in the routes, follow the route
+                    nodeHandler(item.routes[index].gotoNode);
+                    answeredImage = true;
+                    break;
+                }
+            }
+
+            if (!answeredImage) console.error("The given answer is not a valid option.", answer);
+            break;
+        default:
+            console.error("It seems like this question type is not supported: ", item.question);
+            break;
+    }
 }
