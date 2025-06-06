@@ -46,8 +46,12 @@
                     small tree or two, but nothing that could have been used to move these huge statues. It is a
                     fascinating puzzle, one that I will explore in future posts and lectures. Until then, you may wish
                     to investigate the mystery yourself. I suggest you begin with a book called <i>Collapse</i> by Jared
-                    Diamond. <a id="blogLink" class="tabLink" href="#">This review of <i>Collapse</i> is a good place to
-                        start</a><a name="#" id="blogTarget" class="tabLinkTarget"></a>.</p>
+                    Diamond.
+                    <a id="blogLink" class="tabLink" href="#" onclick="clickLink('book_review');">This review of
+                        <i>Collapse</i> is a good place to
+                        start</a><a name="#" id="blogTarget" class="tabLinkTarget"></a>
+                    .
+                </p>
 
                 <div id="comment1" class="comment">
                     <div id="commentHdr1" class="commentHdr">
@@ -69,13 +73,22 @@
                     <p id="commentBdy2" class="commentBdy">
                         I also love reading about your experiences on Easter Island, however, I think there is another
                         theory that should be considered. Check out this article: <a id="newsLink" class="tabLink"
-                            href="#">www.sciencenews.com/Polynesian_rats_Rapa_Nui</a><a name="#" id="newsTarget"
+                            href="#" onclick="clickLink('science_news');">www.sciencenews.com/Polynesian_rats_Rapa_Nui</a><a name="#" id="newsTarget"
                             class="tabLinkTarget"></a>
                     </p>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // If the link is clicked, send the target name to the parent page to navigate
+        function clickLink(target) {
+            window.parent.postMessage({
+                target: target
+            });
+        }
+    </script>
 
 
 
