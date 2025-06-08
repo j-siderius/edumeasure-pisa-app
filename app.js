@@ -221,7 +221,11 @@ function sendButton() {
         // Display the user message
         addChatMessage(userInput, "sent");
 
+        console.log("Readability scores for: '" + userInput + "'", getReadabilityScores(userInput));
+
         checkAnswer(cleanedInput);
+    } else {
+        console.error("No input message was specified!");
     }
 }
 
