@@ -33,8 +33,6 @@ fetch('information.json')
             // Create iframe for content
             var iframe = document.createElement('iframe');
             iframe.src = item.content;
-            iframe.width = '90%';
-            iframe.height = '100%';
 
             // Show the first information tab by default
             if (index === 0) {
@@ -159,6 +157,9 @@ function addMultipleChoiceMessages(options) {
     });
 
     chatMessagesContainer.appendChild(optionsMessage);
+
+    checkScrollBar();
+    scrollToBottomChat();
 }
 
 let multipleChoiceImageCounter = 0;
@@ -186,6 +187,9 @@ function addMultipleChoiceImages(options) {
     });
 
     chatMessagesContainer.appendChild(optionsMessage);
+
+    checkScrollBar();
+    scrollToBottomChat();
 }
 
 // Add a chat message to the chat, taking into account it's type
@@ -208,6 +212,33 @@ function addChatMessage(message, type) {
     }
     chatMessage.classList.add('chat-message', type);
     chatMessagesContainer.appendChild(chatMessage);
+
+    checkScrollBar();
+    scrollToBottomChat();
+
+}
+
+function scrollToBottomChat() {
+    const chatMessages = document.querySelector('.chat-messages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+let overflownChatMessages = false;
+
+function checkScrollBar() {
+    if (!overflownChatMessages) {
+        const chatMessages = document.querySelector('.chat-messages');
+
+        chatMessages.classList.add('has-overflow');
+        let overflow = chatMessages.scrollHeight > chatMessages.clientHeight;
+        chatMessages.classList.remove('has-overflow');
+
+        if (overflow) {
+            overflownChatMessages = true;
+            chatMessages.classList.add('has-overflow');
+            scrollToBottomChat();
+        }
+    }
 }
 
 function sendButton() {

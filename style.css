@@ -12,6 +12,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-height: 0;
 }
 
 .chat-messages {
@@ -20,6 +21,12 @@ body {
     flex-direction: column;
     justify-content: flex-end;
     overflow-y: auto;
+    min-height: 0;
+    padding-right: 10px;
+}
+
+.chat-messages.has-overflow {
+    justify-content: flex-start;
 }
 
 .chat-message {
@@ -28,6 +35,7 @@ body {
     margin-bottom: 10px;
     border-radius: 5px;
     max-width: 60%;
+    flex-shrink: 0;
 }
 
 .chat-message.received {
@@ -104,6 +112,7 @@ body {
     background-color: #e6e6e6;
     padding: 10px;
     border-radius: 5px;
+    flex-shrink: 0;
 }
 
 .chat-bar input {
@@ -179,4 +188,16 @@ body {
 
 .option-btn:hover {
   background-color: #aaa;
+}
+
+iframe {
+    width: 90%;
+    height: 100%;
+}
+
+.modal.fullscreen {
+    background-color: #aaa;
+    flex: none;
+    width: 100%;
+    height: 100%;
 }

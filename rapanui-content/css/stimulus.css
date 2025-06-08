@@ -1,7 +1,9 @@
 body {
     font-family: Arial;
     font-size: 14px;
-    overflow: hidden;
+    padding-right: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 b { font-weight:bold; }
