@@ -12,6 +12,16 @@ fetch("questions.json")
     })
     .catch(error => console.error("Error loading questions.json: ", error));
 
+fetch('settings.json')
+    .then(response => response.json())
+    .then(data => {
+        document.querySelector('.profile-picture').src = data.profile_picture;
+        document.querySelector('.profile-name').textContent = data.name;
+    })
+    .catch(error => console.error("Error loading settings.json: ", error));
+
+
+
 // Fetch all information sources and add them as tabs
 fetch('information.json')
     .then(response => response.json())
