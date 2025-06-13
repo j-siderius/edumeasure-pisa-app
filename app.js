@@ -135,8 +135,8 @@ function nodeHandler(nodeIndex) {
         } else {
             if (item.endTest) {
                 // Last node in the test
-                console.log("End of test is reached.");
                 answers.endTime = Date.now();
+                console.log("End of test is reached. Run `exportAnswers()` in order to download the answers.");
             } else {
                 // Item is not a question, move to next node
                 nodeHandler(item.routes[0].gotoNode);

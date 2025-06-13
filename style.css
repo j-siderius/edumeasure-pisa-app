@@ -27,7 +27,7 @@ body {
 .profile-picture {
     height: 75%;
     padding: 10px;
-    border-radius: 50%;
+    border-radius: 25%;
     background-color: #fff;
 }
 
@@ -45,7 +45,7 @@ body {
     padding-right: 10px;
 }
 
-.chat-messages.has-overflow {
+.has-overflow {
     justify-content: flex-start;
 }
 
@@ -82,13 +82,13 @@ body {
     background-color: #f0fff0;
 }
 
-.chat-message.multipleChoiceOption {
+.multipleChoiceOption {
     align-self: flex-start;
     background-color: #fdffd8;
     cursor: pointer;
 }
 
-.chat-message.multipleChoiceImage {
+.multipleChoiceImage {
     align-self: flex-start;
     cursor: pointer;
     margin-left: auto;
@@ -102,9 +102,8 @@ body {
     margin-bottom: 0px;
 }
 
-.chat-message.multipleChoiceImage img {
+.multipleChoiceImage img {
     height: 10vh;
-
 }
 
 .chat-options {
