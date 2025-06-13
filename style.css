@@ -74,7 +74,6 @@ body {
 
 .chat-message.sentImage img {
     height: 10vh;
-
 }
 
 .chat-message.prompt {
@@ -97,21 +96,19 @@ body {
     margin-bottom: 10px;
 }
 
+.multipleChoiceImage:hover {
+    transform: scale(2);
+    padding: 5px;
+    margin-bottom: 0px;
+}
+
 .chat-message.multipleChoiceImage img {
     height: 10vh;
 
 }
 
-.chat-message.hidden {
-    display: none;
-}
-
 .chat-options {
     padding-left: 20px;
-}
-
-.chat-options.hidden {
-    display: none;
 }
 
 .chat-images {
@@ -120,10 +117,6 @@ body {
     width: 60%;
     background-color: #f0f0f0;
     margin-bottom: 10px;
-}
-
-.chat-images.hidden {
-    display: none;
 }
 
 .chat-bar {
@@ -215,9 +208,16 @@ iframe {
     height: 100%;
 }
 
-.modal.fullscreen {
+.modal {
     background-color: #aaa;
     flex: none;
+}
+
+.fullscreen {
     width: 100%;
     height: 100%;
+}
+
+.hidden {
+    display: none;
 }

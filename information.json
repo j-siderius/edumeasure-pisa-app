@@ -5,10 +5,12 @@
     },
     {
         "name": "Book review",
-        "content": "rapanui-content/book_review.html"
+        "content": "rapanui-content/book_review.html",
+        "hidden": true
     },
     {
         "name": "Science News",
-        "content": "rapanui-content/science_news.html"
+        "content": "rapanui-content/science_news.html",
+        "hidden": true
     }
 ]

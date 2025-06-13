@@ -9,6 +9,7 @@ fetch("questions.json")
         itemData = data;
         currentNode = 0;
         nodeHandler(currentNode);
+        answers.startTime = Date.now();
     })
     .catch(error => console.error("Error loading questions.json: ", error));
 
@@ -37,6 +38,10 @@ fetch('information.json')
             tabLink.textContent = item.name;
             tabLink.classList.add("tab-link");
             tabLink.onclick = function () { selectTab(index); };
+
+            if (item.hidden) {
+                tabLink.classList.add("hidden");
+            }
 
             tabsContainer.appendChild(tabLink);
 
@@ -84,10 +89,14 @@ document.getElementById('chat-input').disabled = true;
 
 // Open the selected tab by hiding all other tabs
 function selectTab(index) {
+    var tabLinks = document.getElementsByClassName('tab-link');
     var iframes = document.getElementById('content').children;
     for (var i = 0; i < iframes.length; i++) {
         var iframe = document.getElementById('content').children[i];
         if (i === index) {
+            if (tabLinks[i].classList.contains("hidden")) {
+                tabLinks[i].classList.remove("hidden");
+            }
             iframe.style.display = 'block';
         } else {
             iframe.style.display = 'none';
@@ -127,6 +136,7 @@ function nodeHandler(nodeIndex) {
             if (item.endTest) {
                 // Last node in the test
                 console.log("End of test is reached.");
+                answers.endTime = Date.now();
             } else {
                 // Item is not a question, move to next node
                 nodeHandler(item.routes[0].gotoNode);
@@ -254,20 +264,48 @@ function checkScrollBar() {
 function sendButton() {
     // Get the user input and clear input field
     let userInput = document.getElementById('chat-input').value;
-    const cleanedInput = document.getElementById('chat-input').value.trim().toLowerCase();
     document.getElementById('chat-input').value = '';
-    if (cleanedInput) {  // If there is input
+    if (userInput.trim()) {  // If there is input
         // Disable the input
         document.getElementById('chat-input').disabled = true;
         // Display the user message
         addChatMessage(userInput, "sent");
-
-        console.log("Readability scores for: '" + userInput + "'", getReadabilityScores(userInput));
-
-        checkAnswer(cleanedInput);
+        checkAnswer(userInput);
     } else {
         console.error("No input message was specified!");
     }
+}
+
+let answers = {};
+
+function saveAnswer(type, answer, proceedNode) {
+    answers[currentNode] = {
+        "type": type,
+        "answer": answer,
+        "proceedNode": proceedNode,
+        "time": Date.now()
+    };
+
+    if (type === "open") {
+        answers[currentNode]["readabilityScores"] = getReadabilityScores(answer);
+    }
+}
+
+let username = "John Example";
+
+function exportAnswers() {
+    // Generate a data blob that contains all answers in JSON format, then make a link and download the file
+    const blob = new Blob([JSON.stringify(answers, null, 2)], {
+        type: "application/json",
+    });
+
+    const link = document.createElement("a");
+    link.download = username.replace(/\s/g, "") + "-" + Date.now() + "-answers.json";
+    link.href = URL.createObjectURL(blob);
+    document.body.appendChild(link);
+
+    link.click();
+    document.body.removeChild(link);
 }
 
 function checkAnswer(answer) {
@@ -284,12 +322,16 @@ function checkAnswer(answer) {
                         if (answer.includes(keyword.trim().toLowerCase())) {
                             // If the given answer includes some keywords, move to the given node
                             nodeHandler(route.gotoNode);
+                            // Save the answer and proceed node
+                            saveAnswer("open", answer, route.gotoNode);
                             break routeLoopBreakpoint;
                         }
                     }
                 } else {
                     // Route has no keywords, aka last route, move to the given node
                     nodeHandler(route.gotoNode);
+                    // Save the answer and proceed node
+                    saveAnswer("open", answer, route.gotoNode);
                     break routeLoopBreakpoint;
                 }
             }
@@ -308,6 +350,7 @@ function checkAnswer(answer) {
 
                     // Given answer occurs in the routes, follow the route
                     nodeHandler(item.routes[index].gotoNode);
+                    saveAnswer("multipleChoice", answer, item.routes[index].gotoNode);
                     answered = true;
                     break;
                 }
@@ -329,6 +372,7 @@ function checkAnswer(answer) {
 
                     // Given answer occurs in the routes, follow the route
                     nodeHandler(item.routes[index].gotoNode);
+                    saveAnswer("multipleChoiceImage", answer, item.routes[index].gotoNode);
                     answeredImage = true;
                     break;
                 }
