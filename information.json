@@ -1,5 +1,9 @@
 [
     {
+        "name": "Y - internet posts",
+        "content": "rapanui-content/y_post.html"
+    },
+    {
         "name": "Professor's blog",
         "content": "rapanui-content/prof_blog.html"
     },

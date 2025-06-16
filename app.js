@@ -60,11 +60,14 @@ fetch('information.json')
                 // Goto selected tab using the passed through target index of the tab
                 let targetTab = event.data.target;
                 switch (targetTab) {
+                    case 'y_post':
+                        selectTab(0);  // TODO: figure out how to remove hardcode
+                        break;
                     case 'book_review':
-                        selectTab(1);  // TODO: figure out how to remove hardcode
+                        selectTab(2);  // TODO: figure out how to remove hardcode
                         break;
                     case 'science_news':
-                        selectTab(2);  // TODO: figure out how to remove hardcode
+                        selectTab(3);  // TODO: figure out how to remove hardcode
                         break;
                     default:
                         console.error("Specified target is not a tab.:", targetTab);
