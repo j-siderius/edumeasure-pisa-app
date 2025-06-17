@@ -3,15 +3,29 @@
 let itemData = null;
 let currentNode = null;
 
-fetch("questions.json")
-    .then(response => response.json())
-    .then(data => {
-        itemData = data;
-        currentNode = 0;
-        nodeHandler(currentNode);
-        answers.startTime = Date.now();
-    })
-    .catch(error => console.error("Error loading questions.json: ", error));
+function startTest() {
+    console.log("start Test");
+
+    // hide modal
+    document.querySelector('.modal.fullscreen').classList.add("hidden");
+    // show chat and reader
+    document.querySelector(".chat-window").classList.remove("hidden");
+    document.querySelector(".reader").classList.remove("hidden");
+
+    
+
+    // Load the questions and start the chat
+    fetch("questions.json")
+        .then(response => response.json())
+        .then(data => {
+            itemData = data;
+            currentNode = 0;
+            nodeHandler(currentNode);
+            answers.startTime = Date.now();
+        })
+        .catch(error => console.error("Error loading questions.json: ", error));
+}
+
 
 fetch('settings.json')
     .then(response => response.json())
@@ -114,7 +128,7 @@ function nodeHandler(nodeIndex) {
         if (message.delay) delayCounter += message.delay;
 
         setTimeout(() => {
-            addChatMessage(message.content, message.type)
+            addChatMessage(message.content, message.type, message.openTab)
         }, delayCounter);
 
     });
@@ -212,11 +226,15 @@ function addMultipleChoiceImages(options) {
 }
 
 // Add a chat message to the chat, taking into account it's type
-function addChatMessage(message, type) {
+function addChatMessage(message, type, openTab = null) {
 
     if (!message || !type) {
         console.error("No message or message type was was specified!", message, type);
         return;
+    }
+
+    if (openTab) {
+        selectTab(openTab);
     }
 
     let chatMessage = document.createElement('div');
@@ -226,10 +244,8 @@ function addChatMessage(message, type) {
         let sentImage = document.createElement('img');
         sentImage.src = message;
         chatMessage.appendChild(sentImage);
-    } else if (type == 'receivedLink') {  // TODO: check why we don't add to innerHTML everywhere?
+    } else {  // Post as innerHTML as we want to enable HTML text being entered.
         chatMessage.innerHTML = message;
-    } else {
-        chatMessage.textContent = message;
     }
     chatMessage.classList.add('chat-message', type);
     chatMessagesContainer.appendChild(chatMessage);

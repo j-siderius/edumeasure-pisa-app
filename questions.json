@@ -13,19 +13,20 @@
                 "delay": 1000
             },
             {
-                "type": "receivedLink",
+                "type": "received",
                 "content": "I saw this post on Y: <a href=\"#\" onclick=\"selectTab(0);\">CuriousMind22 posted on Y, click to read!</a> ",
                 "delay": 1000
             },
             {
-                "type": "receivedLink",
-                "content": "I have read about this strange island: what can you tell me about Rapa Nui? Some professor wrote a blog on it: <a href=\"#\" onclick=\"selectTab(1);\">Professors Blog on Rapa Nui, click to read!</a>",
+                "type": "received",
+                "content": "I have read about this strange island: what can you tell me about Rapa Nui?",
                 "delay": 1500
             },
             {
                 "type": "prompt",
                 "content": "Use the Professor's blog to find information about Rapa Nui. Answer in the chat box below.",
-                "delay": 500
+                "delay": 500,
+                "openTab": 1
             }
         ],
         "question": "open",
