@@ -1,11 +1,13 @@
 [
     {
         "name": "Y - internet posts",
-        "content": "rapanui-content/y_post.html"
+        "content": "rapanui-content/y_post.html",
+        "hidden": true
     },
     {
         "name": "Professor's blog",
-        "content": "rapanui-content/prof_blog.html"
+        "content": "rapanui-content/prof_blog.html",
+        "hidden": true
     },
     {
         "name": "Book review",

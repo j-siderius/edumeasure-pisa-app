@@ -49,12 +49,8 @@ fetch('information.json')
             var iframe = document.createElement('iframe');
             iframe.src = item.content;
 
-            // Show the first information tab by default
-            if (index === 0) {
-                iframe.style.display = 'block';
-            } else {
-                iframe.style.display = 'none';
-            }
+            // Hide all information tabs by default
+            iframe.style.display = 'none';
 
             window.addEventListener('message', function (event) {
                 // Goto selected tab using the passed through target index of the tab
@@ -230,6 +226,8 @@ function addChatMessage(message, type) {
         let sentImage = document.createElement('img');
         sentImage.src = message;
         chatMessage.appendChild(sentImage);
+    } else if (type == 'receivedLink') {  // TODO: check why we don't add to innerHTML everywhere?
+        chatMessage.innerHTML = message;
     } else {
         chatMessage.textContent = message;
     }
