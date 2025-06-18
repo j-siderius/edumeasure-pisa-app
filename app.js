@@ -15,7 +15,7 @@ function startTest() {
     document.querySelector(".reader").classList.remove("hidden");
 
     // Load the questions and start the chat
-    fetch("questions.json")
+    fetch("PISA-items.json")
         .then(response => response.json())
         .then(data => {
             itemData = data;

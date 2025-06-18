@@ -5,7 +5,11 @@
         "messages": [
             {
                 "type": "received",
-                "content": "I saw this post on Y: <a href=\"#\" onclick=\"selectTab(0);\">CuriousMind22 posted on Y, click to read!</a> ",
+                "content": "Hey there!"
+            },
+            {
+                "type": "received",
+                "content": "I saw this post on Y: <a href=\"#\" onclick=\"selectTab(0);\">CuriousMind22 posted on Y, click to read!</a>",
                 "delay": 1000
             },
             {
@@ -118,13 +122,17 @@
         "messages": [
             {
                 "type": "received",
+                "content": "I also found this blog article by some professor on Rapa Nui: <a href=\"#\" onclick=\"selectTab(1);\">Professor's Blog - Rapa Nui, click to read!</a>",
+                "delay": 1000
+            },
+            {
+                "type": "received",
                 "content": "Why is the professor visiting Rapa Nui?",
                 "delay": 1000
             },
             {
                 "type": "prompt",
-                "content": "Read the blog post and then choose an answer to the question.",
-                "openTab": 1
+                "content": "Clink on the link to open the blog. Read the blog post and then choose an answer to the question."
             }
         ],
         "options": [
@@ -214,9 +222,9 @@
         "optionDescriptions": "a. ropes b. 'dancing' c. cranes d. logs",
         "options": [
             "assets/images/option_a.png",
-            "assets/images/option_a.png",
-            "assets/images/option_a.png",
-            "assets/images/option_a.png"
+            "assets/images/option_b.png",
+            "assets/images/option_c.png",
+            "assets/images/option_d.png"
         ],
         "dropTargets": [
             "Mentioned in blog",
@@ -337,7 +345,7 @@
         "messages": [
             {
                 "type": "received",
-                "content": "Have you seen the book review of <i>Collapse by Jared Diamond</i> already? It's mentioned on the Professor's Blog.",
+                "content": "Have you seen the book review of <i>Collapse by Jared Diamond</i> already? It's mentioned on the Professor's Blog: <a href=\"#\" onclick=\"selectTab(0);\">Collapse book review, click to read!</a>",
                 "delay": 1000
             },
             {
@@ -347,8 +355,7 @@
             },
             {
                 "type": "prompt",
-                "content": "Read the book review and choose an answer to the question.",
-                "openTab": 2
+                "content": "Clink the link to open the book review. Read the book review and choose an answer to the question."
             }
         ],
         "options": [
@@ -489,7 +496,7 @@
         "messages": [
             {
                 "type": "received",
-                "content": "One of the comments on the Professor's blog also mentions a Science News article, have you seen it?",
+                "content": "One of the comments on the Professor's blog also mentions a Science News article: <a href=\"#\" onclick=\"selectTab(0);\">Science news article, click to read!</a>",
                 "delay": 1000
             },
             {
@@ -499,8 +506,7 @@
             },
             {
                 "type": "prompt",
-                "content": "Select an image below that shows the results of introducing rats to Rapa Nui.",
-                "openTab": 3
+                "content": "Click the link to open the Science News article. Select an image below that shows the results of introducing rats to Rapa Nui."
             }
         ],
         "optionDescriptions": "a. broken canoes b. lots of rats, ecological damage c. forests full of trees (healthy) d. Europeans arriving on boats",
@@ -608,7 +614,7 @@
             },
             {
                 "type": "prompt",
-                "content": "Drag and drop the events in the order that they happened on Rapa Nui. The first event should be on the left, the last even on the right."
+                "content": "Drag and drop the events in the order that they happened on Rapa Nui."
             }
         ],
         "options": [
@@ -618,7 +624,7 @@
         ],
         "dropTargets": [
             "First event",
-            "Middle event",
+            "Second event",
             "Last event"
         ],
         "routes": [
