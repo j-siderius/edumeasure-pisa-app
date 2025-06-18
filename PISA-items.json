@@ -24,10 +24,10 @@
         ],
         "optionDescriptions": "a. One large moai b. aliens depositing moai c. humans moving moai (with  heir hands) d. sci-fi movie background",
         "options": [
-            "assets/images/option_a.png",
-            "assets/images/option_b.png",
-            "assets/images/option_c.png",
-            "assets/images/option_d.png"
+            "assets/images/RN01-A.png",
+            "assets/images/RN01-B.png",
+            "assets/images/RN01-C.png",
+            "assets/images/RN01-D.png"
         ],
         "routes": [
             {
@@ -176,10 +176,10 @@
         ],
         "optionDescriptions": "a. full of plants and flowers b. grass, tall trees, volcanoes c. grass, shrubs, volcanoes d. grass and shrubs only",
         "options": [
-            "assets/images/option_a.png",
-            "assets/images/option_b.png",
-            "assets/images/option_c.png",
-            "assets/images/option_d.png"
+            "assets/images/RN05-A.png",
+            "assets/images/RN05-B.png",
+            "assets/images/RN05-C.png",
+            "assets/images/RN05-D.png"
         ],
         "routes": [
             {
@@ -221,10 +221,10 @@
         ],
         "optionDescriptions": "a. ropes b. 'dancing' c. cranes d. logs",
         "options": [
-            "assets/images/option_a.png",
-            "assets/images/option_b.png",
-            "assets/images/option_c.png",
-            "assets/images/option_d.png"
+            "assets/images/RN06-A.png",
+            "assets/images/RN06-B.png",
+            "assets/images/RN06-C.png",
+            "assets/images/RN06-D.png"
         ],
         "dropTargets": [
             "Mentioned in blog",
@@ -315,10 +315,10 @@
         ],
         "optionDescriptions": "a. no maoi, many trees b. no maoi, but lots of trees and people c. lots of people and trees + moai d. few people and trees + moai",
         "options": [
-            "assets/images/option_a.png",
-            "assets/images/option_b.png",
-            "assets/images/option_c.png",
-            "assets/images/option_d.png"
+            "assets/images/RN09-A.png",
+            "assets/images/RN09-B.png",
+            "assets/images/RN09-C.png",
+            "assets/images/RN09-D.png"
         ],
         "routes": [
             {
@@ -511,10 +511,10 @@
         ],
         "optionDescriptions": "a. broken canoes b. lots of rats, ecological damage c. forests full of trees (healthy) d. Europeans arriving on boats",
         "options": [
-            "assets/images/option_a.png",
-            "assets/images/option_b.png",
-            "assets/images/option_c.png",
-            "assets/images/option_d.png"
+            "assets/images/RN14-A.png",
+            "assets/images/RN14-B.png",
+            "assets/images/RN14-C.png",
+            "assets/images/RN14-D.png"
         ],
         "routes": [
             {
@@ -649,10 +649,10 @@
         ],
         "optionDescriptions": "a. Civil war in Rapa Nui b. Humans over-hunting animal species c. Polynesians carving the moai d. Europeans arriving on the island",
         "options": [
-            "assets/images/option_a.png",
-            "assets/images/option_b.png",
-            "assets/images/option_c.png",
-            "assets/images/option_d.png"
+            "assets/images/RN18-A.png",
+            "assets/images/RN18-B.png",
+            "assets/images/RN18-C.png",
+            "assets/images/RN18-D.png"
         ],
         "routes": [
             {
