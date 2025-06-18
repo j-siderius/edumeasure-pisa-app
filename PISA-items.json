@@ -1,0 +1,742 @@
+[
+    {
+        "item": "RN01",
+        "question": "multipleChoiceImage",
+        "messages": [
+            {
+                "type": "received",
+                "content": "I saw this post on Y: <a href=\"#\" onclick=\"selectTab(0);\">CuriousMind22 posted on Y, click to read!</a> ",
+                "delay": 1000
+            },
+            {
+                "type": "received",
+                "content": "Which image matches the ideas in this Y post the best?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Click on the link above to open the Y post. Then select an image below that matches the text."
+            }
+        ],
+        "optionDescriptions": "a. One large moai b. aliens depositing moai c. humans moving moai (with  heir hands) d. sci-fi movie background",
+        "options": [
+            "assets/images/option_a.png",
+            "assets/images/option_b.png",
+            "assets/images/option_c.png",
+            "assets/images/option_d.png"
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 1
+            },
+            {
+                "_comment": "option B - correct",
+                "gotoNode": 1
+            },
+            {
+                "_comment": "option C",
+                "gotoNode": 1
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 1
+            }
+        ]
+    },
+    {
+        "item": "RN02",
+        "question": "multipleChoice",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What does the author of the post believe?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Choose an answer to the question."
+            }
+        ],
+        "options": [
+            "The author believes that sci-fi movies always include aliens.",
+            "The author believes that aliens invented construction materials.",
+            "The author believes that humans could not have moved the moai.",
+            "The author believes that aliens probably do not exist."
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 2
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 2
+            },
+            {
+                "_comment": "option C - correct",
+                "gotoNode": 2
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 2
+            }
+        ]
+    },
+    {
+        "item": "RN03",
+        "question": "open",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What two reasons does the author give for her opinion?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Type a response in the chat to explain the author's opinions."
+            }
+        ],
+        "routes": [
+            {
+                "keywords": [
+                    "keyword A",
+                    "keyword B",
+                    "keyword C"
+                ],
+                "gotoNode": 3
+            },
+            {
+                "_comment": "incorrect answer",
+                "gotoNode": 3
+            }
+        ]
+    },
+    {
+        "item": "RN04",
+        "question": "multipleChoice",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Why is the professor visiting Rapa Nui?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Read the blog post and then choose an answer to the question.",
+                "openTab": 1
+            }
+        ],
+        "options": [
+            "The professor is there to study plants.",
+            "The professor is there to create art pieces.",
+            "The professor is there to inspect volcanoes.",
+            "The professor is there to research the moai."
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 4
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 4
+            },
+            {
+                "_comment": "option C",
+                "gotoNode": 4
+            },
+            {
+                "_comment": "option D - correct",
+                "gotoNode": 4
+            }
+        ]
+    },
+    {
+        "item": "RN05",
+        "question": "multipleChoiceImage",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What is the landscape like on Rapa Nui?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Select an image below that matches the description in the text."
+            }
+        ],
+        "optionDescriptions": "a. full of plants and flowers b. grass, tall trees, volcanoes c. grass, shrubs, volcanoes d. grass and shrubs only",
+        "options": [
+            "assets/images/option_a.png",
+            "assets/images/option_b.png",
+            "assets/images/option_c.png",
+            "assets/images/option_d.png"
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 5
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 5
+            },
+            {
+                "_comment": "option C - correct",
+                "gotoNode": 5
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 5
+            }
+        ]
+    },
+    {
+        "item": "RN06",
+        "question": "dragAndDrop",
+        "messages": [
+            {
+                "type": "received",
+                "content": "The professor describes different techniques that might have been used to move the Moai statues on Rapa Nui.",
+                "delay": 1000
+            },
+            {
+                "type": "received",
+                "content": "What techniques does she mention?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Drag and drop the images below to mentioned or not mentioned in the blog."
+            }
+        ],
+        "optionDescriptions": "a. ropes b. 'dancing' c. cranes d. logs",
+        "options": [
+            "assets/images/option_a.png",
+            "assets/images/option_a.png",
+            "assets/images/option_a.png",
+            "assets/images/option_a.png"
+        ],
+        "dropTargets": [
+            "Mentioned in blog",
+            "Mentioned in blog",
+            "Not mentioned in blog",
+            "Not mentioned in blog"
+        ],
+        "routes": [
+            {
+                "gotoNode": 6
+            }
+        ]
+    },
+    {
+        "item": "RN07",
+        "question": "open",
+        "messages": [
+            {
+                "type": "received",
+                "content": "The professor mentions that there is still one unsolved mystery. What is it?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Type a response in the chat to describe the remaining mystery."
+            }
+        ],
+        "routes": [
+            {
+                "keywords": [
+                    "keyword A",
+                    "keyword B",
+                    "keyword C"
+                ],
+                "gotoNode": 7
+            },
+            {
+                "_comment": "incorrect answer",
+                "gotoNode": 7
+            }
+        ]
+    },
+    {
+        "item": "RN08",
+        "question": "dragAndDrop",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Which statements from the two texts are facts and which ones are opinions?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Drag and drop the quotes to 'opinion' or 'fact'."
+            }
+        ],
+        "options": [
+            "Some moai weigh thousands of kilos.",
+            "The transportation of the moai is a fascinating puzzle.",
+            "Aliens helping with the moai is a wild idea.",
+            "Rapa Nui is also called Easter Island."
+        ],
+        "dropTargets": [
+            "Opinion",
+            "Opinion",
+            "Fact",
+            "Fact"
+        ],
+        "routes": [
+            {
+                "gotoNode": 8
+            }
+        ]
+    },
+    {
+        "item": "RN09",
+        "question": "multipleChoiceImage",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What did Rapa Nui look like in 700?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Select the image that matches the description of Rapa Nui in 700."
+            }
+        ],
+        "optionDescriptions": "a. no maoi, many trees b. no maoi, but lots of trees and people c. lots of people and trees + moai d. few people and trees + moai",
+        "options": [
+            "assets/images/option_a.png",
+            "assets/images/option_b.png",
+            "assets/images/option_c.png",
+            "assets/images/option_d.png"
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 9
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 9
+            },
+            {
+                "_comment": "option C - correct",
+                "gotoNode": 9
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 9
+            }
+        ]
+    },
+    {
+        "item": "RN10",
+        "question": "multipleChoice",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Have you seen the book review of <i>Collapse by Jared Diamond</i> already? It's mentioned on the Professor's Blog.",
+                "delay": 1000
+            },
+            {
+                "type": "received",
+                "content": "Why did Rapa Nui change, according to Mr. Diamond?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Read the book review and choose an answer to the question.",
+                "openTab": 2
+            }
+        ],
+        "options": [
+            "It changed because the Polynesians left.",
+            "It changed because the birds ate all vegetables.",
+            "It changed because of farming, over-hunting and fighting.",
+            "It changed because of global warming."
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 10
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 10
+            },
+            {
+                "_comment": "option C - correct",
+                "gotoNode": 10
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 10
+            }
+        ]
+    },
+    {
+        "item": "RN11",
+        "question": "multipleChoice",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Which statement would Mr. Diamond agree with?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Choose the statement that Mr. Diamond would most likely agree with, based on the text."
+            }
+        ],
+        "options": [
+            "Rapa Nui is an example of what happens when you don't respect nature.",
+            "Rapa Nui demonstrates that farming can enhance land quality.",
+            "Global warming caused the collapse of Rapa Nui.",
+            "Europeans caused the environmental collapse on Rapa Nui."
+        ],
+        "routes": [
+            {
+                "_comment": "option A - correct",
+                "gotoNode": 11
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 11
+            },
+            {
+                "_comment": "option C",
+                "gotoNode": 11
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 11
+            }
+        ]
+    },
+    {
+        "item": "RN12",
+        "question": "open",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Based on this book review, why should someone read the book Collapse?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Type a response in the chat to share at least two reasons for reading Collapse."
+            }
+        ],
+        "routes": [
+            {
+                "keywords": [
+                    "keyword A",
+                    "keyword B",
+                    "keyword C"
+                ],
+                "gotoNode": 12
+            },
+            {
+                "_comment": "incorrect answer",
+                "gotoNode": 12
+            }
+        ]
+    },
+    {
+        "item": "RN13",
+        "question": "multipleChoice",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Where could someone find more information about what it's like for a researcher to live on Rapa Nui?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Choose an answer to the question."
+            }
+        ],
+        "options": [
+            "In the book review.",
+            "In the book Collapse by Jared Diamond.",
+            "In the professor's blog.",
+            "In the Y post."
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 13
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 13
+            },
+            {
+                "_comment": "option C - correct",
+                "gotoNode": 13
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 13
+            }
+        ]
+    },
+    {
+        "item": "RN14",
+        "question": "multipleChoiceImage",
+        "messages": [
+            {
+                "type": "received",
+                "content": "One of the comments on the Professor's blog also mentions a Science News article, have you seen it?",
+                "delay": 1000
+            },
+            {
+                "type": "received",
+                "content": "Based on the article, which image best represents the results of introducing rats to Rapa Nui?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Select an image below that shows the results of introducing rats to Rapa Nui.",
+                "openTab": 3
+            }
+        ],
+        "optionDescriptions": "a. broken canoes b. lots of rats, ecological damage c. forests full of trees (healthy) d. Europeans arriving on boats",
+        "options": [
+            "assets/images/option_a.png",
+            "assets/images/option_b.png",
+            "assets/images/option_c.png",
+            "assets/images/option_d.png"
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 14
+            },
+            {
+                "_comment": "option B - correct",
+                "gotoNode": 14
+            },
+            {
+                "_comment": "option C",
+                "gotoNode": 14
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 14
+            }
+        ]
+    },
+    {
+        "item": "RN15",
+        "question": "multipleChoice",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Why was the book <i>Collapse</i> controversial among scientists?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Choose the statement that best summarizes the disagreement between scientists."
+            }
+        ],
+        "options": [
+            "They didn't agree that humans were the main reason for the destruction of the trees.",
+            "They didn't agree that Europeans arrived on Rapa Nui in the 18th century.",
+            "They didn't agree that the trees had disappeared on Rapa Nui.",
+            "They didn't agree that the rats were brought over by the Polynesians."
+        ],
+        "routes": [
+            {
+                "_comment": "option A - correct",
+                "gotoNode": 15
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 15
+            },
+            {
+                "_comment": "option C",
+                "gotoNode": 15
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 15
+            }
+        ]
+    },
+    {
+        "item": "RN16",
+        "question": "open",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What did Carl Lipo and Terry Hunt believe about the cause of the disappearance of the trees on Rapa Nui?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Type a response in the chat to explain the two authors' theory."
+            }
+        ],
+        "routes": [
+            {
+                "keywords": [
+                    "keyword A",
+                    "keyword B",
+                    "keyword C"
+                ],
+                "gotoNode": 16
+            },
+            {
+                "_comment": "incorrect answer",
+                "gotoNode": 16
+            }
+        ]
+    },
+    {
+        "item": "RN17",
+        "question": "dragAndDrop",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What series of events happened on Rapa Nui, according to the two authors?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Drag and drop the events in the order that they happened on Rapa Nui. The first event should be on the left, the last even on the right."
+            }
+        ],
+        "options": [
+            "Polynesians brought over rats.",
+            "The rat population grew and ate the tree seeds.",
+            "The Europeans discover that there are not trees on Rapa Nui."
+        ],
+        "dropTargets": [
+            "First event",
+            "Middle event",
+            "Last event"
+        ],
+        "routes": [
+            {
+                "gotoNode": 17
+            }
+        ]
+    },
+    {
+        "item": "RN18",
+        "question": "multipleChoiceImage",
+        "messages": [
+            {
+                "type": "received",
+                "content": "Which picture shows an event that is mentioned in both the book review and the science news article?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Choose the event that is mentioned in both the book review and the science news article."
+            }
+        ],
+        "optionDescriptions": "a. Civil war in Rapa Nui b. Humans over-hunting animal species c. Polynesians carving the moai d. Europeans arriving on the island",
+        "options": [
+            "assets/images/option_a.png",
+            "assets/images/option_b.png",
+            "assets/images/option_c.png",
+            "assets/images/option_d.png"
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 18
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 18
+            },
+            {
+                "_comment": "option C",
+                "gotoNode": 18
+            },
+            {
+                "_comment": "option D - correct",
+                "gotoNode": 18
+            }
+        ]
+    },
+    {
+        "item": "RN19",
+        "question": "open",
+        "messages": [
+            {
+                "type": "received",
+                "content": "How can you explain the mystery of the moai statues on Rapa Nui?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Type a response in the chat to explain the moai statues using information from at least two texts."
+            }
+        ],
+        "routes": [
+            {
+                "keywords": [
+                    "keyword A",
+                    "keyword B",
+                    "keyword C"
+                ],
+                "gotoNode": 19
+            },
+            {
+                "_comment": "incorrect answer",
+                "gotoNode": 19
+            }
+        ]
+    },
+    {
+        "item": "RN20",
+        "question": "open",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What parts of the texts can help you know if they are trustworthy or not?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Type a response in the chat to explain the features of the texts that help show they are trustworthy or not. Use specific examples."
+            }
+        ],
+        "routes": [
+            {
+                "keywords": [
+                    "keyword A",
+                    "keyword B",
+                    "keyword C"
+                ],
+                "gotoNode": 20
+            },
+            {
+                "_comment": "incorrect answer",
+                "gotoNode": 20
+            }
+        ]
+    },
+    {
+        "messages": [
+            {
+                "type": "received",
+                "content": "Thank you for chatting!",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "This is the end of the test"
+            }
+        ],
+        "endTest": true
+    }
+]

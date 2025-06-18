@@ -1,0 +1,187 @@
+[
+    {
+        "item": "RN00",
+        "question": "multipleChoice",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What is the answer to this multiple choice question?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Answer the multiple choice question by clicking below:"
+            }
+        ],
+        "options": [
+            "Option A",
+            "Option B",
+            "Option C",
+            "Option D"
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 0
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 0
+            },
+            {
+                "_comment": "option C",
+                "gotoNode": 0
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 0
+            }
+        ]
+    },
+    {
+        "item": "RN00",
+        "question": "multipleChoiceImage",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What is the answer to this multiple choice image question?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Answer the multiple choice image question by clicking below:"
+            }
+        ],
+        "options": [
+            "assets/images/option_a.png",
+            "assets/images/option_b.png",
+            "assets/images/option_c.png",
+            "assets/images/option_d.png"
+        ],
+        "routes": [
+            {
+                "_comment": "option A",
+                "gotoNode": 0
+            },
+            {
+                "_comment": "option B",
+                "gotoNode": 0
+            },
+            {
+                "_comment": "option C",
+                "gotoNode": 0
+            },
+            {
+                "_comment": "option D",
+                "gotoNode": 0
+            }
+        ]
+    },
+    {
+        "item": "RN00",
+        "question": "open",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What is the answer to this open question?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Answer the open question by writing in chat below:"
+            }
+        ],
+        "routes": [
+            {
+                "keywords": [
+                    "keyword A",
+                    "keyword B",
+                    "keyword C"
+                ],
+                "gotoNode": 0
+            },
+            {
+                "_comment": "incorrect answer",
+                "gotoNode": 0
+            }
+        ]
+    },
+    {
+        "item": "RN00",
+        "question": "dragAndDrop",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What is the answer to this drag and drop question?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Drag and drop the option to the field below:"
+            }
+        ],
+        "options": [
+            "option A",
+            "option B",
+            "option C",
+            "option D"
+        ],
+        "dropTargets": [
+            "target A",
+            "target B",
+            "target C",
+            "target D"
+        ],
+        "routes": [
+            {
+                "gotoNode": 0
+            }
+        ]
+    },
+    {
+        "item": "RN00",
+        "question": "dragAndDrop",
+        "messages": [
+            {
+                "type": "received",
+                "content": "What is the answer to this drag and drop image question?",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "Drag and drop the image to the field below:"
+            }
+        ],
+        "options": [
+            "assets/images/option_a.png",
+            "assets/images/option_a.png",
+            "assets/images/option_a.png",
+            "assets/images/option_a.png"
+        ],
+        "dropTargets": [
+            "target A",
+            "target B",
+            "target C",
+            "target D"
+        ],
+        "routes": [
+            {
+                "gotoNode": 0
+            }
+        ]
+    },
+    {
+        "messages": [
+            {
+                "type": "received",
+                "content": "Thank you for chatting!",
+                "delay": 1000
+            },
+            {
+                "type": "prompt",
+                "content": "This is the end of the test"
+            }
+        ],
+        "endTest": true
+    }
+]
