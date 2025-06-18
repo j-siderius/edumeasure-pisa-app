@@ -193,6 +193,38 @@
         "messages": [
             {
                 "type": "received",
+                "content": "Maybe you can tell me which image is which?",
+                "delay": 1500
+            },
+            {
+                "type": "prompt",
+                "content": "Drag and drop the correct option to the correct field.",
+                "delay": 1000
+            }
+        ],
+        "question": "dragAndDrop",
+        "options": [
+            "assets/images/rat.png",
+            "assets/images/bananas.png",
+            "Some other text"
+        ],
+        "dropTargets": [
+            "rat",
+            "bananas",
+            "three"
+        ],
+        "routes": [
+            {
+                "_comment": "only one option to continue",
+                "gotoNode": 10
+            }
+        ]
+    },
+    {
+        "_comment": "node 10",
+        "messages": [
+            {
+                "type": "received",
                 "content": "Thank you for chatting to me!"
             },
             {

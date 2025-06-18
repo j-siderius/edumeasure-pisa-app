@@ -1,18 +1,18 @@
+// DEBUG DISABLES TIMERS
+const DEBUG = false;
+
 // Fetch all questions and save them into a variable for later access
 // Define node tracker variable
 let itemData = null;
 let currentNode = null;
 
 function startTest() {
-    console.log("start Test");
 
     // hide modal
     document.querySelector('.modal.fullscreen').classList.add("hidden");
     // show chat and reader
     document.querySelector(".chat-window").classList.remove("hidden");
     document.querySelector(".reader").classList.remove("hidden");
-
-    
 
     // Load the questions and start the chat
     fetch("questions.json")
@@ -99,6 +99,7 @@ document.getElementById("chat-input").addEventListener("keypress", function (eve
     }
 });
 document.getElementById('chat-input').disabled = true;
+document.getElementById('send-button').disabled = true;
 
 // Open the selected tab by hiding all other tabs
 function selectTab(index) {
@@ -129,7 +130,7 @@ function nodeHandler(nodeIndex) {
 
         setTimeout(() => {
             addChatMessage(message.content, message.type, message.openTab)
-        }, delayCounter);
+        }, DEBUG ? 0 : delayCounter);
 
     });
 
@@ -137,27 +138,135 @@ function nodeHandler(nodeIndex) {
     setTimeout(() => {
         if (item.question) {
 
+            document.getElementById('chat-input').disabled = true;
+            document.getElementById('send-button').disabled = true;
+
             if (item.question == "multipleChoice") {
                 addMultipleChoiceMessages(item.options);
             } else if (item.question == "multipleChoiceImage") {
                 addMultipleChoiceImages(item.options);
+            } else if (item.question == "dragAndDrop") {
+                addDragAndDrop(item.options, item.dropTargets);
             } else {
                 // Item is an open question, enable the answer field after all messages have been sent
                 document.getElementById('chat-input').disabled = false;
+                document.getElementById('send-button').disabled = false;
             }
         } else {
             if (item.endTest) {
                 // Last node in the test
                 answers.endTime = Date.now();
-                console.log("End of test is reached. Run `exportAnswers()` in order to download the answers.");
+                // console.log("End of test is reached. Run `exportAnswers()` in order to download the answers.");
+                setTimeout(() => {
+                    exportAnswers();
+                }, 2500);
             } else {
                 // Item is not a question, move to next node
                 nodeHandler(item.routes[0].gotoNode);
             }
         }
-    }, delayCounter);
+    }, DEBUG ? 0 : delayCounter);
 
     currentNode = nodeIndex;
+}
+
+let dropCounter = 0;
+
+function addDragAndDrop(options, dropTargets) {
+    let optionsMessage = document.createElement('div');
+    optionsMessage.classList.add('chat-drop');
+    optionsMessage.id = dropCounter;
+    let dropTargetMessage = document.createElement('div');
+    dropTargetMessage.classList.add('drop-targets');
+
+    // Add the new options to the chat messages container
+    let chatMessagesContainer = document.querySelector('.chat-messages');
+
+    // Compare length of options to length of dropTargets
+    if (!options.length === dropTargets.length) {
+        console.error("Options and dropTargets do not have the same length. Please check your JSON file.", options.length, dropTargets.length);
+        return;
+    }
+
+    // Create and add each option link
+    options.forEach((option, index) => {
+        let optionMessage = document.createElement('div');
+        optionMessage.classList.add('chat-message', 'multipleChoiceImage');
+
+        if (option.includes(".png") || option.includes(".jpg") || option.includes(".jpeg")) {
+            let optionImage = document.createElement('img');
+            optionImage.src = option;
+            optionImage.draggable = true;
+            optionImage.id = index + " " + option;
+            optionImage.classList.add('dropOption');
+
+            optionImage.ondragstart = dragstartHandler;
+            optionMessage.appendChild(optionImage);
+        } else {
+            let optionText = document.createElement('span');
+            optionText.innerHTML = option;
+            optionText.draggable = true;
+            optionText.id = index + " " + option;
+            optionText.classList.add('dropOption');
+
+            optionText.ondragstart = dragstartHandler;
+            optionMessage.appendChild(optionText);
+
+            optionMessage.classList.add('nohover');
+        }
+
+
+        optionsMessage.appendChild(optionMessage);
+    });
+
+    chatMessagesContainer.appendChild(optionsMessage);
+    let horizontalDivide = document.createElement('hr');
+    horizontalDivide.classList.add('dropDivide');
+    horizontalDivide.id = dropCounter;
+    chatMessagesContainer.appendChild(horizontalDivide);
+
+
+    let optionsMessage2 = document.createElement('div');
+    optionsMessage2.classList.add('chat-answers');
+    optionsMessage2.id = dropCounter;
+
+    // Create and add each target
+    dropTargets.forEach((dropTarget, index) => {
+        let dropTargetDiv = document.createElement('div');
+        dropTargetDiv.classList.add('chat-message', 'multipleChoiceTarget');
+        dropTargetDiv.id = index;
+
+        let dropTargetName = document.createElement('span');
+        dropTargetName.textContent = dropTarget; // Set the text content of the span to the drop target name
+
+        dropTargetDiv.appendChild(dropTargetName);
+        dropTargetName.ondragover = dragoverHandler; // Add the dragover handler function to the drop target div
+        dropTargetName.ondrop = dropHandler;
+
+        optionsMessage2.appendChild(dropTargetDiv); // Append the drop target div to the options message container
+    });
+
+    chatMessagesContainer.appendChild(optionsMessage2);
+
+    checkScrollBar();
+    scrollToBottomChat();
+
+    document.getElementById('send-button').disabled = false;
+}
+
+// Drap and Drop handler functions
+function dragstartHandler(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function dragoverHandler(ev) {
+    ev.preventDefault();
+}
+
+function dropHandler(ev) {
+    ev.preventDefault();
+    const data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
 }
 
 let multipleChoiceCounter = 0;
@@ -279,17 +388,37 @@ function checkScrollBar() {
 }
 
 function sendButton() {
-    // Get the user input and clear input field
-    let userInput = document.getElementById('chat-input').value;
-    document.getElementById('chat-input').value = '';
-    if (userInput.trim()) {  // If there is input
-        // Disable the input
-        document.getElementById('chat-input').disabled = true;
-        // Display the user message
-        addChatMessage(userInput, "sent");
-        checkAnswer(userInput);
-    } else {
-        console.error("No input message was specified!");
+    if (itemData[currentNode].question == "open") {
+
+        // Get the user input and clear input field
+        let userInput = document.getElementById('chat-input').value;
+        document.getElementById('chat-input').value = '';
+        if (userInput.trim()) {  // If there is input
+            // Disable the input
+            document.getElementById('chat-input').disabled = true;
+            document.getElementById('send-button').disabled = true;
+            // Display the user message
+            addChatMessage(userInput, "sent");
+            checkAnswer(userInput);
+        } else {
+            console.error("No input message was specified!");
+            return;
+        }
+    } else if (itemData[currentNode].question == "dragAndDrop") {
+        let answerDiv = document.getElementsByClassName('chat-answers')[dropCounter].children;
+
+        let answers = [];
+
+        Array.from(answerDiv).forEach((answer, index) => {
+            if (answer.children[0].children[0]) {
+                answers.push(answer.children[0].children[0].id);
+                console.log(answer.children[0].children[0].id);
+            } else {
+                console.error("Not all drag and drop options were filled in!", index, answer)
+            }
+        });
+
+        checkAnswer(answers);
     }
 }
 
@@ -317,7 +446,8 @@ function exportAnswers() {
     });
 
     const link = document.createElement("a");
-    link.download = username.replace(/\s/g, "") + "-" + Date.now() + "-answers.json";
+    // link.download = username.replace(/\s/g, "") + "-" + Date.now() + "-answers.json";
+    link.download = "PISA-Pilot2030-" + Date.now() + "-answers.json";
     link.href = URL.createObjectURL(blob);
     document.body.appendChild(link);
 
@@ -385,7 +515,7 @@ function checkAnswer(answer) {
                     // Add the given answer to the chat and delete the options
                     addChatMessage(item.options[index], 'sentImage');
                     document.getElementsByClassName('chat-images')[multipleChoiceImageCounter].classList.add('hidden');
-                    multipleChoiceCounter++;
+                    multipleChoiceImageCounter++;
 
                     // Given answer occurs in the routes, follow the route
                     nodeHandler(item.routes[index].gotoNode);
@@ -396,6 +526,18 @@ function checkAnswer(answer) {
             }
 
             if (!answeredImage) console.error("The given answer is not a valid option.", answer);
+            break;
+
+        case "dragAndDrop":
+            console.log("dragAndDrop answer:", answer);
+
+            document.getElementsByClassName('chat-drop')[dropCounter].classList.add('hidden');
+            document.getElementsByClassName('dropDivide')[dropCounter].classList.add('hidden');
+
+            nodeHandler(item.routes[0].gotoNode);
+            saveAnswer("dragAndDrop", answer, item.routes[0].gotoNode);
+            dropCounter++;
+
             break;
         default:
             console.error("It seems like this question type is not supported: ", item.question);
