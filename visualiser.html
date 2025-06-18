@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dialog Flow Visualizer</title>
+    <link rel="icon" href="favicon.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <style>
         body {
@@ -211,6 +212,7 @@
                     id: index,
                     type: nodeType,
                     question: nodeData.question || 'none',
+                    item: nodeData.item || 'none',
                     messageDetails: messageDetails,
                     messages: nodeData.messages || [],
                     options: nodeData.options || [],
@@ -274,13 +276,14 @@
             let linkLabel = '';
             
             if (nodeData.question === 'multipleChoice' && nodeData.options) {
-                linkLabel = `Opt ${routeIndex + 1}: ${nodeData.options[routeIndex]?.substring(0, 20)}...`;
+                // linkLabel = `Opt ${routeIndex + 1}: ${nodeData.options[routeIndex]?.substring(0, 20)}...`;
+                linkLabel = `${nodeData.options[routeIndex]}`;
             } else if (nodeData.question === 'multipleChoiceImage' && nodeData.options) {
-                linkLabel = `Opt ${routeIndex + 1}: Image`;
+                // linkLabel = `Opt ${routeIndex + 1}: Image`;
+                linkLabel = `${nodeData.options[routeIndex]}`;
             } else if (nodeData.question === 'open' && route.keywords) {
-                linkLabel = `Keywords: ${route.keywords.join(', ')}`;
-            } else if (route._comment) {
-                linkLabel = route._comment.replace('option ', 'Opt ').replace(' (correct)', ' ✓').replace(' (incorrect)', ' ✗');
+                // linkLabel = `Keywords: ${route.keywords.join(', ')}`;
+                linkLabel = `${route.keywords.join(', ')}`;
             } else {
                 linkLabel = `Route ${routeIndex + 1}`;
             }
@@ -292,8 +295,11 @@
         function createVisualization() {
             const { nodes, links } = parseDialogData(itemData);
             
-            const width = 1600;
+            // const width = 2000;
             const height = 800;
+
+            let width = document.getElementById("visualization").offsetWidth;
+            // let height = document.getElementById("visualization").offsetHeight;
             
             // Create SVG
             const svg = d3.select('#visualization')
@@ -343,7 +349,7 @@
             
             // Create force simulation
             const simulation = d3.forceSimulation(nodes)
-                .force('link', d3.forceLink(links).id(d => d.id).distance(150))
+                .force('link', d3.forceLink(links).id(d => d.id).distance(100))
                 .force('charge', d3.forceManyBody().strength(-300))
                 .force('center', d3.forceCenter(width / 2, height / 2))
                 .force('collision', d3.forceCollide().radius(30))
@@ -404,6 +410,7 @@
                 let tooltipContent = `<strong>Node ${d.id}</strong><br/>`;
                 tooltipContent += `Type: ${d.type}<br/>`;
                 if (d.question !== 'none') tooltipContent += `Question: ${d.question}<br/>`;
+                if (d.item !== 'none') tooltipContent += `Item: ${d.item}<br/>`;
                 if (d.options.length > 0) tooltipContent += `Options: ${d.options.length}<br/>`;
                 if (d.messageDetails) {
                     tooltipContent += `<br/><strong>Messages:</strong><br/>`;
