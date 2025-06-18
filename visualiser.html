@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialog Flow Visualizer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        #visualization {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .node {
+            cursor: pointer;
+            stroke-width: 2px;
+        }
+        
+        .node.start { fill: #4CAF50; stroke: #45a049; cursor: default; }
+        .node.question { fill: #2196F3; stroke: #1976D2; }
+        .node.intermediate { fill: #FF9800; stroke: #F57C00; }
+        .node.end { fill: #f44336; stroke: #d32f2f; cursor: default; }
+        
+        .node:hover { 
+            stroke-width: 3px; 
+            filter: brightness(1.1);
+        }
+        
+        .link {
+            stroke: #666;
+            stroke-width: 2px;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+        
+        .link.multi-route {
+            stroke: #ff6b6b;
+            stroke-width: 2.5px;
+        }
+        
+        .node-label {
+            font-size: 12px;
+            font-weight: bold;
+            text-anchor: middle;
+            fill: white;
+            pointer-events: none;
+        }
+        
+        .edge-label {
+            font-size: 10px;
+            fill: #666;
+            text-anchor: middle;
+            background: white;
+            pointer-events: none;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 5px;
+            pointer-events: none;
+            font-size: 12px;
+            max-width: 300px;
+            z-index: 1000;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background: #2196F3;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #1976D2;
+        }
+        
+        .legend {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .legend h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .legend-item {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+            border: 2px solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dialog Flow Visualizer</h1>
+        
+        <div class="controls">
+            <button onclick="resetZoom()">Reset Zoom</button>
+            <button onclick="centerGraph()">Center Graph</button>
+        </div>
+        
+        <div id="visualization"></div>
+        
+        <div class="legend">
+            <h3>Legend</h3>
+            <div class="legend-item">
+                <span class="legend-color start" style="background: #4CAF50; border-color: #45a049;"></span>
+                Start Node
+            </div>
+            <div class="legend-item">
+                <span class="legend-color question" style="background: #2196F3; border-color: #1976D2;"></span>
+                Question Node
+            </div>
+            <div class="legend-item">
+                <span class="legend-color intermediate" style="background: #FF9800; border-color: #F57C00;"></span>
+                Intermediate Node
+            </div>
+            <div class="legend-item">
+                <span class="legend-color end" style="background: #f44336; border-color: #d32f2f;"></span>
+                End Node
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variable to store dialog data
+        let itemData = null;
+
+    // Load the questions and start the chat
+    fetch("questions.json")
+      .then(response => response.json())
+      .then(data => {
+        itemData = data;
+        // Initialize visualization
+        createVisualization();
+      })
+      .catch(error => console.error("Error loading questions.json: ", error));
+
+        // Parse the dialog data into nodes and links
+        function parseDialogData(data) {
+            const nodes = [];
+            const links = [];
+            
+            data.forEach((nodeData, index) => {
+                // Skip empty nodes
+                if (!nodeData || (!nodeData.messages && !nodeData.routes && !nodeData.endTest)) {
+                    return;
+                }
+                
+                // Determine node type
+                let nodeType = 'intermediate';
+                if (index === 0) nodeType = 'start';
+                else if (nodeData.endTest) nodeType = 'end';
+                else if (nodeData.question) nodeType = 'question';
+                
+                // Get all messages with their details
+                let messageDetails = '';
+                if (nodeData.messages && nodeData.messages.length > 0) {
+                    messageDetails = nodeData.messages.map((msg, msgIndex) => {
+                        const cleanContent = (msg.content || '').replace(/<[^>]*>/g, '');
+                        return `[${msg.type || 'unknown'}] ${cleanContent} (delay: ${msg.delay || 0}ms)`;
+                    }).join('\n');
+                }
+                
+                nodes.push({
+                    id: index,
+                    type: nodeType,
+                    question: nodeData.question || 'none',
+                    messageDetails: messageDetails,
+                    messages: nodeData.messages || [],
+                    options: nodeData.options || [],
+                    endTest: nodeData.endTest || false
+                });
+                
+                // Group routes by target to handle multiple routes to same node
+                const routeGroups = {};
+                if (nodeData.routes) {
+                    nodeData.routes.forEach((route, routeIndex) => {
+                        if (route.gotoNode !== undefined) {
+                            if (!routeGroups[route.gotoNode]) {
+                                routeGroups[route.gotoNode] = [];
+                            }
+                            routeGroups[route.gotoNode].push({ route, routeIndex });
+                        }
+                    });
+                }
+                
+                // Create links with proper labeling and curve offsets
+                Object.keys(routeGroups).forEach(targetNode => {
+                    const routes = routeGroups[targetNode];
+                    
+                    if (routes.length === 1) {
+                        // Single route - no curve needed
+                        const { route, routeIndex } = routes[0];
+                        let linkLabel = getLinkLabel(nodeData, route, routeIndex);
+                        
+                        links.push({
+                            source: index,
+                            target: parseInt(targetNode),
+                            label: linkLabel,
+                            curveOffset: 0
+                        });
+                    } else {
+                        // Multiple routes to same target - create curved links
+                        routes.forEach(({ route, routeIndex }, groupIndex) => {
+                            let linkLabel = getLinkLabel(nodeData, route, routeIndex);
+                            
+                            // Calculate curve offset based on position in group
+                            const totalRoutes = routes.length;
+                            const curveOffset = ((groupIndex - (totalRoutes - 1) / 2) * 30);
+                            
+                            links.push({
+                                source: index,
+                                target: parseInt(targetNode),
+                                label: linkLabel,
+                                curveOffset: curveOffset,
+                                multiRoute: true
+                            });
+                        });
+                    }
+                });
+            });
+            
+            return { nodes, links };
+        }
+        
+        // Helper function to generate link labels
+        function getLinkLabel(nodeData, route, routeIndex) {
+            let linkLabel = '';
+            
+            if (nodeData.question === 'multipleChoice' && nodeData.options) {
+                linkLabel = `Opt ${routeIndex + 1}: ${nodeData.options[routeIndex]?.substring(0, 20)}...`;
+            } else if (nodeData.question === 'multipleChoiceImage' && nodeData.options) {
+                linkLabel = `Opt ${routeIndex + 1}: Image`;
+            } else if (nodeData.question === 'open' && route.keywords) {
+                linkLabel = `Keywords: ${route.keywords.join(', ')}`;
+            } else if (route._comment) {
+                linkLabel = route._comment.replace('option ', 'Opt ').replace(' (correct)', ' ✓').replace(' (incorrect)', ' ✗');
+            } else {
+                linkLabel = `Route ${routeIndex + 1}`;
+            }
+            
+            return linkLabel;
+        }
+
+        // Create the visualization
+        function createVisualization() {
+            const { nodes, links } = parseDialogData(itemData);
+            
+            const width = 1160;
+            const height = 800;
+            
+            // Create SVG
+            const svg = d3.select('#visualization')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Add zoom behavior
+            const g = svg.append('g');
+            const zoom = d3.zoom()
+                .scaleExtent([0.1, 4])
+                .on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                });
+            svg.call(zoom);
+            
+            // Store zoom for reset function
+            window.svgZoom = zoom;
+            window.svg = svg;
+            
+            // Define arrow markers
+            svg.append('defs').selectAll('marker')
+                .data(['arrowhead'])
+                .enter().append('marker')
+                .attr('id', 'arrowhead')
+                .attr('viewBox', '0 -5 10 10')
+                .attr('refX', 15)
+                .attr('refY', 0)
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('orient', 'auto')
+                .append('path')
+                .attr('d', 'M0,-5L10,0L0,5')
+                .attr('class', 'arrowhead')
+                .style('fill', '#666');
+            
+            // Pin start and end nodes
+            nodes.forEach(node => {
+                if (node.type === 'start') {
+                    node.fx = 80; // Fixed to left side
+                    node.fy = height / 2; // Centered vertically
+                } else if (node.type === 'end') {
+                    node.fx = width - 80; // Fixed to right side
+                    node.fy = height / 2; // Centered vertically
+                }
+            });
+            
+            // Create force simulation
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(150))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(30))
+                .force('x', d3.forceX().x(d => {
+                    // Apply gentle horizontal positioning for non-fixed nodes
+                    if (d.type === 'start') return 80;
+                    if (d.type === 'end') return width - 80;
+                    // For other nodes, encourage left-to-right flow based on distance from start
+                    return width * 0.2 + (width * 0.6) * Math.random();
+                }).strength(0.1));
+            
+            // Create links with curves for multiple routes to same target
+            const link = g.append('g')
+                .selectAll('path')
+                .data(links)
+                .enter().append('path')
+                .attr('class', d => `link ${d.multiRoute ? 'multi-route' : ''}`);
+            
+            // Create link labels
+            const linkLabels = g.append('g')
+                .selectAll('text')
+                .data(links)
+                .enter().append('text')
+                .attr('class', 'edge-label')
+                .text(d => d.label);
+            
+            // Create nodes
+            const node = g.append('g')
+                .selectAll('circle')
+                .data(nodes)
+                .enter().append('circle')
+                .attr('class', d => `node ${d.type}`)
+                .attr('r', 25)
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+            
+            // Create node labels
+            const nodeLabels = g.append('g')
+                .selectAll('text')
+                .data(nodes)
+                .enter().append('text')
+                .attr('class', 'node-label')
+                .text(d => d.id);
+            
+            // Create tooltip
+            const tooltip = d3.select('body').append('div')
+                .attr('class', 'tooltip')
+                .style('opacity', 0);
+            
+            // Add hover events
+            node.on('mouseover', function(event, d) {
+                tooltip.transition()
+                    .duration(200)
+                    .style('opacity', .9);
+                    
+                let tooltipContent = `<strong>Node ${d.id}</strong><br/>`;
+                tooltipContent += `Type: ${d.type}<br/>`;
+                if (d.question !== 'none') tooltipContent += `Question: ${d.question}<br/>`;
+                if (d.options.length > 0) tooltipContent += `Options: ${d.options.length}<br/>`;
+                if (d.messageDetails) {
+                    tooltipContent += `<br/><strong>Messages:</strong><br/>`;
+                    tooltipContent += d.messageDetails.replace(/\n/g, '<br/>');
+                }
+                
+                tooltip.html(tooltipContent)
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY - 28) + 'px');
+            })
+            .on('mouseout', function(d) {
+                tooltip.transition()
+                    .duration(500)
+                    .style('opacity', 0);
+            });
+            
+            // Update positions on simulation tick
+            simulation.on('tick', () => {
+                // Update curved paths for links
+                link.attr('d', d => {
+                    const dx = d.target.x - d.source.x;
+                    const dy = d.target.y - d.source.y;
+                    const dr = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (d.curveOffset === 0) {
+                        // Straight line for single routes
+                        return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
+                    } else {
+                        // Curved line for multiple routes to same target
+                        const midX = (d.source.x + d.target.x) / 2;
+                        const midY = (d.source.y + d.target.y) / 2;
+                        
+                        // Calculate perpendicular offset
+                        const offsetX = -dy / dr * d.curveOffset;
+                        const offsetY = dx / dr * d.curveOffset;
+                        
+                        const controlX = midX + offsetX;
+                        const controlY = midY + offsetY;
+                        
+                        return `M${d.source.x},${d.source.y}Q${controlX},${controlY} ${d.target.x},${d.target.y}`;
+                    }
+                });
+                
+                // Update link labels positions
+                linkLabels
+                    .attr('x', d => {
+                        if (d.curveOffset === 0) {
+                            return (d.source.x + d.target.x) / 2;
+                        } else {
+                            const dx = d.target.x - d.source.x;
+                            const dy = d.target.y - d.source.y;
+                            const dr = Math.sqrt(dx * dx + dy * dy);
+                            const midX = (d.source.x + d.target.x) / 2;
+                            const offsetX = -dy / dr * d.curveOffset;
+                            return midX + offsetX;
+                        }
+                    })
+                    .attr('y', d => {
+                        if (d.curveOffset === 0) {
+                            return (d.source.y + d.target.y) / 2;
+                        } else {
+                            const dx = d.target.x - d.source.x;
+                            const dy = d.target.y - d.source.y;
+                            const dr = Math.sqrt(dx * dx + dy * dy);
+                            const midY = (d.source.y + d.target.y) / 2;
+                            const offsetY = dx / dr * d.curveOffset;
+                            return midY + offsetY;
+                        }
+                    });
+                
+                node
+                    .attr('cx', d => d.x)
+                    .attr('cy', d => d.y);
+                
+                nodeLabels
+                    .attr('x', d => d.x)
+                    .attr('y', d => d.y + 5);
+            });
+            
+            // Drag functions
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                // Don't allow dragging of start and end nodes
+                if (d.type !== 'start' && d.type !== 'end') {
+                    d.fx = d.x;
+                    d.fy = d.y;
+                }
+            }
+            
+            function dragged(event, d) {
+                // Don't allow dragging of start and end nodes
+                if (d.type !== 'start' && d.type !== 'end') {
+                    d.fx = event.x;
+                    d.fy = event.y;
+                }
+            }
+            
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                // Don't allow dragging of start and end nodes
+                if (d.type !== 'start' && d.type !== 'end') {
+                    d.fx = null;
+                    d.fy = null;
+                }
+            }
+        }
+        
+        // Utility functions
+        window.resetZoom = function() {
+            window.svg.transition().duration(750).call(
+                window.svgZoom.transform,
+                d3.zoomIdentity
+            );
+        };
+        
+        window.centerGraph = function() {
+            const bounds = document.querySelector('#visualization svg g').getBBox();
+            const parent = document.querySelector('#visualization svg');
+            const fullWidth = parent.clientWidth || parent.parentNode.clientWidth;
+            const fullHeight = parent.clientHeight || parent.parentNode.clientHeight;
+            const width = bounds.width;
+            const height = bounds.height;
+            const midX = bounds.x + width / 2;
+            const midY = bounds.y + height / 2;
+            
+            const scale = 0.8 / Math.max(width / fullWidth, height / fullHeight);
+            const translate = [fullWidth / 2 - scale * midX, fullHeight / 2 - scale * midY];
+            
+            window.svg.transition().duration(750).call(
+                window.svgZoom.transform,
+                d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
+            );
+        };
+    </script>
+</body>
+</html>
