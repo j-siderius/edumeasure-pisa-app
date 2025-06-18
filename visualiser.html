@@ -14,7 +14,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 90%;
             margin: 0 auto;
         }
         
@@ -172,7 +172,7 @@
         let itemData = null;
 
     // Load the questions and start the chat
-    fetch("questions.json")
+    fetch("PISA-items.json")
       .then(response => response.json())
       .then(data => {
         itemData = data;
@@ -292,7 +292,7 @@
         function createVisualization() {
             const { nodes, links } = parseDialogData(itemData);
             
-            const width = 1160;
+            const width = 1600;
             const height = 800;
             
             // Create SVG
