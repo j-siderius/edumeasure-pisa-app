@@ -1,5 +1,5 @@
 // DEBUG DISABLES TIMERS
-const DEBUG = false;
+let DEBUG = false;
 
 // Fetch all questions and save them into a variable for later access
 // Define node tracker variable
