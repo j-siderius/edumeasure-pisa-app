@@ -32,7 +32,7 @@
         "routes": [
             {
                 "_comment": "option A",
-                "gotoNode": 1
+                "gotoNode": 21
             },
             {
                 "_comment": "option B - correct",
@@ -40,11 +40,11 @@
             },
             {
                 "_comment": "option C",
-                "gotoNode": 1
+                "gotoNode": 21
             },
             {
                 "_comment": "option D",
-                "gotoNode": 1
+                "gotoNode": 21
             }
         ]
     },
@@ -71,11 +71,11 @@
         "routes": [
             {
                 "_comment": "option A",
-                "gotoNode": 2
+                "gotoNode": 22
             },
             {
                 "_comment": "option B",
-                "gotoNode": 2
+                "gotoNode": 22
             },
             {
                 "_comment": "option C - correct",
@@ -83,7 +83,7 @@
             },
             {
                 "_comment": "option D",
-                "gotoNode": 2
+                "gotoNode": 22
             }
         ]
     },
@@ -104,15 +104,16 @@
         "routes": [
             {
                 "keywords": [
-                    "keyword A",
-                    "keyword B",
-                    "keyword C"
+                    "heavy",
+                    "large",
+                    "no resources",
+                    "no construction"
                 ],
                 "gotoNode": 3
             },
             {
                 "_comment": "incorrect answer",
-                "gotoNode": 3
+                "gotoNode": 23
             }
         ]
     },
@@ -144,15 +145,15 @@
         "routes": [
             {
                 "_comment": "option A",
-                "gotoNode": 4
+                "gotoNode": 24
             },
             {
                 "_comment": "option B",
-                "gotoNode": 4
+                "gotoNode": 24
             },
             {
                 "_comment": "option C",
-                "gotoNode": 4
+                "gotoNode": 24
             },
             {
                 "_comment": "option D - correct",
@@ -744,5 +745,81 @@
             }
         ],
         "endTest": true
+    },
+    {
+        "messages": [
+            {
+                "type":"received",
+                "content": "Mmmhhh, I don't know about that. I think that the Maoi statues being brought in by aliens might be a better picture.",
+                "delay": 1000
+            },
+            {
+                "type": "received",
+                "content": "Anyway...",
+                "delay": 1000
+            }
+        ],
+        "routes": [
+            {
+                "_comment": "continue to next item",
+                "gotoNode": 1
+            }
+        ]
+    },
+    {
+        "messages": [
+            {
+                "type": "received",
+                "content": "Mhhh, I think that the author believed that the humans would not be able to move the Maoi statues...",
+                "delay": 1000
+            }
+        ],
+        "routes": [
+            {
+                "_comment": "continue to next item",
+                "gotoNode": 2
+            }
+        ]
+    },
+    {
+        "messages": [
+            {
+                "type": "received",
+                "content": "I believe that the poster thinks that the Maoi statues are too heavy.",
+                "delay": 1000
+            },
+            {
+                "type": "received",
+                "content": "They also think that there are not enough resources on the island to construct tools to help them.",
+                "delay": 1000
+            }
+        ],
+        "routes": [
+            {
+                "_comment": "continue to next item",
+                "gotoNode": 3
+            }
+        ]
+    },
+    {
+        
+        "messages": [
+            {
+                "type": "received",
+                "content": "I think that the professor is visiting Rapa Nui to find out more about the Maoi.",
+                "delay": 1000
+            },
+            {
+                "type": "received",
+                "content": "Anyway...",
+                "delay": 1000
+            }
+        ],
+        "routes": [
+            {
+                "_comment": "continue to next item",
+                "gotoNode": 4
+            }
+        ]
     }
 ]
