@@ -305,6 +305,11 @@
         "messages": [
             {
                 "type": "received",
+                "content": "Have you seen the book review of <i>Collapse by Jared Diamond</i> already? It's mentioned on the Professor's Blog: <a href=\"#\" onclick=\"selectTab(2);\">Collapse book review, click to read!</a>",
+                "delay": 1000
+            },
+            {
+                "type": "received",
                 "content": "What did Rapa Nui look like in 700?",
                 "delay": 1000
             },
@@ -343,11 +348,6 @@
         "item": "RN10",
         "question": "multipleChoice",
         "messages": [
-            {
-                "type": "received",
-                "content": "Have you seen the book review of <i>Collapse by Jared Diamond</i> already? It's mentioned on the Professor's Blog: <a href=\"#\" onclick=\"selectTab(0);\">Collapse book review, click to read!</a>",
-                "delay": 1000
-            },
             {
                 "type": "received",
                 "content": "Why did Rapa Nui change, according to Mr. Diamond?",
@@ -496,7 +496,7 @@
         "messages": [
             {
                 "type": "received",
-                "content": "One of the comments on the Professor's blog also mentions a Science News article: <a href=\"#\" onclick=\"selectTab(0);\">Science news article, click to read!</a>",
+                "content": "One of the comments on the Professor's blog also mentions a Science News article: <a href=\"#\" onclick=\"selectTab(3);\">Science news article, click to read!</a>",
                 "delay": 1000
             },
             {
