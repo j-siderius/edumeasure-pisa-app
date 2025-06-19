@@ -749,7 +749,7 @@
     {
         "messages": [
             {
-                "type":"received",
+                "type": "received",
                 "content": "Mmmhhh, I don't know about that. I think that the Maoi statues being brought in by aliens might be a better picture.",
                 "delay": 1000
             },
@@ -802,7 +802,6 @@
         ]
     },
     {
-        
         "messages": [
             {
                 "type": "received",
