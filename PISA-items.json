@@ -93,7 +93,7 @@
         "messages": [
             {
                 "type": "received",
-                "content": "What two reasons does the author give for her opinion?",
+                "content": "What reason does the author give for her opinion?",
                 "delay": 1000
             },
             {
@@ -311,12 +311,12 @@
             },
             {
                 "type": "received",
-                "content": "What did Rapa Nui look like in 700?",
+                "content": "What did Rapa Nui look like before 700?",
                 "delay": 1000
             },
             {
                 "type": "prompt",
-                "content": "Select the image that matches the description of Rapa Nui in 700."
+                "content": "Select the image that matches the description of Rapa Nui before 700."
             }
         ],
         "optionDescriptions": "a. no maoi, many trees b. no maoi, but lots of trees and people c. lots of people and trees + moai d. few people and trees + moai",
@@ -328,7 +328,7 @@
         ],
         "routes": [
             {
-                "_comment": "option A",
+                "_comment": "option A - correct",
                 "gotoNode": 9
             },
             {
@@ -336,7 +336,7 @@
                 "gotoNode": 9
             },
             {
-                "_comment": "option C - correct",
+                "_comment": "option C",
                 "gotoNode": 9
             },
             {
@@ -624,9 +624,9 @@
             "The Europeans discover that there are not trees on Rapa Nui."
         ],
         "dropTargets": [
-            "First event",
-            "Second event",
-            "Last event"
+            "1",
+            "2",
+            "3"
         ],
         "routes": [
             {
