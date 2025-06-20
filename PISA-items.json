@@ -311,12 +311,12 @@
             },
             {
                 "type": "received",
-                "content": "What did Rapa Nui look like before 700?",
+                "content": "What did Rapa Nui look like after it was settled by the Polynesians around 700?",
                 "delay": 1000
             },
             {
                 "type": "prompt",
-                "content": "Select the image that matches the description of Rapa Nui before 700."
+                "content": "Select the image that matches the description of Rapa Nui around 700."
             }
         ],
         "optionDescriptions": "a. no maoi, many trees b. no maoi, but lots of trees and people c. lots of people and trees + moai d. few people and trees + moai",

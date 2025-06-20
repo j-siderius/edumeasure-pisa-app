@@ -283,3 +283,7 @@ iframe {
     width: 50%;
     padding-left: 25%;
 }
+
+a, a:visited {
+    color: rgb(50, 50, 255);
+}
