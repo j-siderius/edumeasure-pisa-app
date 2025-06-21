@@ -156,10 +156,10 @@ function nodeHandler(nodeIndex) {
             if (item.endTest) {
                 // Last node in the test
                 answers.endTime = Date.now();
-                // console.log("End of test is reached. Run `exportAnswers()` in order to download the answers.");
-                setTimeout(() => {
-                    exportAnswers();
-                }, 2500);
+                console.log("End of test is reached. Run `exportAnswers()` in order to download the answers.");
+                // setTimeout(() => {
+                //     exportAnswers();
+                // }, 2500);
             } else {
                 // Item is not a question, move to next node
                 nodeHandler(item.routes[0].gotoNode);
