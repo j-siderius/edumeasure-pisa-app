@@ -284,6 +284,6 @@ iframe {
     padding-left: 25%;
 }
 
-a, a:visited {
+a.clickLink, a.clickLink:visited {
     color: rgb(50, 50, 255);
 }

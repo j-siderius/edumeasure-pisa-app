@@ -9,7 +9,7 @@
             },
             {
                 "type": "received",
-                "content": "I saw this post on Y: <a href=\"#\" onclick=\"selectTab(0);\">CuriousMind22 posted on Y, click to read!</a>",
+                "content": "I saw this post on Y: <a href=\"#\" onclick=\"selectTab(0);\" class=\"clickLink\">CuriousMind22 posted on Y, click to read!</a>",
                 "delay": 1000
             },
             {
@@ -123,7 +123,7 @@
         "messages": [
             {
                 "type": "received",
-                "content": "I also found this blog article by some professor on Rapa Nui: <a href=\"#\" onclick=\"selectTab(1);\">Professor's Blog - Rapa Nui, click to read!</a>",
+                "content": "I also found this blog article by some professor on Rapa Nui: <a href=\"#\" onclick=\"selectTab(1);\" class=\"clickLink\">Professor's Blog - Rapa Nui, click to read!</a>",
                 "delay": 1000
             },
             {
@@ -306,7 +306,7 @@
         "messages": [
             {
                 "type": "received",
-                "content": "Have you seen the book review of <i>Collapse by Jared Diamond</i> already? It's mentioned on the Professor's Blog: <a href=\"#\" onclick=\"selectTab(2);\">Collapse book review, click to read!</a>",
+                "content": "Have you seen the book review of <i>Collapse by Jared Diamond</i> already? It's mentioned on the Professor's Blog: <a href=\"#\" onclick=\"selectTab(2);\" class=\"clickLink\">Collapse book review, click to read!</a>",
                 "delay": 1000
             },
             {
@@ -497,7 +497,7 @@
         "messages": [
             {
                 "type": "received",
-                "content": "One of the comments on the Professor's blog also mentions a Science News article: <a href=\"#\" onclick=\"selectTab(3);\">Science news article, click to read!</a>",
+                "content": "One of the comments on the Professor's blog also mentions a Science News article: <a href=\"#\" onclick=\"selectTab(3);\" class=\"clickLink\">Science news article, click to read!</a>",
                 "delay": 1000
             },
             {
