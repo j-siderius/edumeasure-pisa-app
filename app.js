@@ -544,3 +544,16 @@ function checkAnswer(answer) {
             break;
     }
 }
+
+function isMobile() {
+    const userAgentCheck = /Mobi|Android/i.test(navigator.userAgent);
+    const widthCheck = window.innerWidth <= 768;
+    return userAgentCheck || widthCheck;
+}
+
+if (isMobile()) {
+    console.log("You are using a mobile browser.");
+    alert("Possible mobile device detected!\n\nThis platform is only designed to be used on computer hardware like laptops and desktops. Features will not work corectly on mobile devices.");
+} else {
+    console.log("You are using a desktop browser.");
+}
